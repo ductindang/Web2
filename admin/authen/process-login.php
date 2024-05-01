@@ -41,7 +41,7 @@ if (!empty($_POST)) {
             $_SESSION['current_user'] = $user;
             if ($user['role_id'] == 4) {
                 // Nếu là user, chuyển hướng đến trang user
-                header('Location: ../user/dashboard.php');
+                header('Location: ../../');
             } else {
                 // Nếu không phải admin hoặc user, chuyển hướng đến trang mặc định
                 header('Location: ../dashboard.php');

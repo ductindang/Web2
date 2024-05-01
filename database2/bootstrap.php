@@ -15,6 +15,8 @@
     require_once "../model/ward/WardRepository.php";
     require_once "../model/category/Category.php";
     require_once "../model/category/CategoryRepository.php";
+    require_once "../service/MailService.php";
+
 
     
 

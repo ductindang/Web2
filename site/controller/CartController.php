@@ -3,6 +3,7 @@ class CartController {
 	protected $cartStorage;
 	function __construct() {
 		$this->cartStorage = new CartStorage();
+		echo "hello123";
 	}
 	function display() {
 		$cart = $this->cartStorage->fetch();
