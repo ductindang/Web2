@@ -113,23 +113,23 @@ class CustomerController {
         }
 	}
 
-	// function updatePassword() {
-	// 	$code = $_POST["code"];
-    //     try {
-    //         $decoded = JWT::decode($code, JWT_KEY, array('HS256'));
-    //         $email = $decoded->email;
-    //         $customerRepository = new CustomerRepository();
-    //         $customer = $customerRepository->findEmail($email);
-	// 		$newPassword = $_POST["password"];
-	// 		// $hashNewPassword = password_hash($newPassword, PASSWORD_BCRYPT);
-    //         $customer->setPassword($newPassword);
-	// 		$customerRepository->update($customer);
-	// 		$_SESSION["success"] = "Password resets successfully";
-	// 		header("location: index.php");
-	// 		// echo "No error";
-    //     }
-    //     catch(Exception $e) {
-    //         echo "You try hack!";
-    //     }
-	// }
+	function updatePassword() {
+		$code = $_POST["code"];
+        try {
+            $decoded = JWT::decode($code, JWT_KEY, array('HS256'));
+            $email = $decoded->email;
+            $customerRepository = new CustomerRepository();
+            $customer = $customerRepository->findEmail($email);
+			$newPassword = $_POST["password"];
+			// $hashNewPassword = password_hash($newPassword, PASSWORD_BCRYPT);
+            $customer->setPassword($newPassword);
+			$customerRepository->update($customer);
+			$_SESSION["success"] = "Password resets successfully";
+			header("location: index.php");
+			// echo "No error";
+        }
+        catch(Exception $e) {
+            echo "You try hack!";
+        }
+	}
 }
