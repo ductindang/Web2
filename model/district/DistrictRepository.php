@@ -1,5 +1,4 @@
 <?php
-
 class DistrictRepository {
 
 	protected function fetchAll($condition = null, $order = null)

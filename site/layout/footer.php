@@ -13,7 +13,7 @@
                                      ?>
                                     <ul class="list-unstyled">
                                         <?php foreach ($categories as $category): ?>
-                                        <li><a href="#"><?=$category->getName()?> </a></li>
+                                        <li><a href="index.php?c=product&category_id=<?=$category->getId()?>" title="<?=$category->getName()?>"><?=$category->getName()?> </a></li>
                                         <?php endforeach ?>
                                     </ul>
                                 </div>

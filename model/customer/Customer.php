@@ -1,5 +1,5 @@
 <?php
-    class Customer{
+       class Customer{
         protected $id;
         protected $role_id;
         protected $name;

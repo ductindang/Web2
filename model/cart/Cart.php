@@ -1,17 +1,17 @@
-<?php
+<?php 
+class Cart
+{
+	protected $items;
+	protected $total_price;
+	protected $total_product_number;
 
-Class Cart{
-    protected $items;
-    protected $total_price;
-    protected $total_product_number;
+	function __construct($items = array(), $total_price = 0, $total_product_number = 0){
+		$this->items = $items;
+		$this->total_price = $total_price;
+		$this->total_product_number = $total_product_number;
+	}
 
-    function __construct($items = array(), $total_price = 0, $total_product_number = 0){
-        $this->items = $items;
-        $this->total_price = $total_price;
-        $this->total_product_number = $total_product_number;
-    }
-
-    function getItems(){
+	function getItems(){
 		return $this->items;
 	}
 
@@ -38,8 +38,7 @@ Class Cart{
 		return $this;
 	}
 
-
-    function addProduct($product_id, $qty) {
+	function addProduct($product_id, $qty) {
 		$productRepository = new ProductRepository();
 		$product = $productRepository->find($product_id);
 		$item = array(

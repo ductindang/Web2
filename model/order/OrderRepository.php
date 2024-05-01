@@ -1,12 +1,12 @@
 <?php
-class OrderRepository extends BaseRepository{
+class OrderRepository extends BaseRepository
+{
 	protected function fetchAll($condition = null, $sort = null)
 	{
 		global $conn;
 		$orders = array();
 		$sql = "SELECT * FROM `order`";
-		if ($condition) 
-		{
+		if ($condition) {
 			$sql .= " WHERE  $condition";
 		}
 
@@ -16,10 +16,8 @@ class OrderRepository extends BaseRepository{
 
 		$result = $conn->query($sql);
 
-		if ($result->num_rows > 0) 
-		{
-			while ($row = $result->fetch_assoc()) 
-			{
+		if ($result->num_rows > 0) {
+			while ($row = $result->fetch_assoc()) {
 				$order = new Order($row["id"], $row["created_date"], $row["order_status_id"], $row["staff_id"], $row["customer_id"], $row["shipping_fullname"], $row["shipping_mobile"], $row["payment_method"], $row["shipping_ward_id"], $row["shipping_housenumber_street"], $row["shipping_fee"], $row["delivered_date"]);
 				$orders[] = $order;
 			}
@@ -28,28 +26,32 @@ class OrderRepository extends BaseRepository{
 		return $orders;
 	}
 
-	function getAll() {
+	function getAll()
+	{
 		return $this->fetchAll();
 	}
 
-	function getByCustomerId($customer_id) {
-		global $conn; 
+	function getByCustomerId($customer_id)
+	{
+		global $conn;
 		$condition = "customer_id = $customer_id";
 		$sort = "ORDER BY id DESC";
 		return $this->fetchAll($condition, $sort);
 	}
 
-	function find($id) {
-		global $conn; 
+	function find($id)
+	{
+		global $conn;
 		$condition = "id = $id";
 		$orders = $this->fetchAll($condition);
 		$order = current($orders);
 		return $order;
 	}
 
-	function save($data) {
+	function save($data)
+	{
 		global $conn;
-		$created_date = $data["created_date"]; 
+		$created_date = $data["created_date"];
 		$order_status_id = $data["order_status_id"];
 		$staff_id = $data["staff_id"];
 		$customer_id = $data["customer_id"];
@@ -65,19 +67,20 @@ class OrderRepository extends BaseRepository{
 			$staff_id = "NULL";
 		}
 
-		$sql = "INSERT INTO `order` (created_date, order_status_id, staff_id, customer_id,shipping_fullname, shipping_mobile, payment_method, shipping_ward_id, shipping_housenumber_street, shipping_fee, delivered_date) VALUES ('$created_date', $order_status_id, $staff_id, $customer_id, '$shipping_fullname', '$shipping_mobile', '$payment_method', '$shipping_ward_id', '$shipping_housenumber_street', $shipping_fee, '$delivered_date')";
+		$sql = "INSERT INTO `order` (created_date, status, user_id, payment_method, shipping_fee, delivered_date, cus_fullname, cus_mobile, cus_address, total_money)  VALUES ('$created_date', $order_status_id, $customer_id, '$payment_method', '$shipping_fee', '$delivered_date', '$shipping_fullname', '$shipping_mobile', $shipping_fee, '$delivered_date')";
 		if ($conn->query($sql) === TRUE) {
-			$last_id = $conn->insert_id;//chỉ cho auto increment
-		    return $last_id;
-		} 
+			$last_id = $conn->insert_id; //chỉ cho auto increment
+			return $last_id;
+		}
 		echo "Error: " . $sql . PHP_EOL . $conn->error;
 		return false;
 	}
 
-	function update($order) {
+	function update($order)
+	{
 		global $conn;
 		$id = $order->getId();
-		$created_date = $order->getCreatedDate(); 
+		$created_date = $order->getCreatedDate();
 		$order_status_id = $order->getStatusId();
 		$staff_id = $order->getStaffId();
 		$customer_id = $order->getCustomerId();
@@ -103,47 +106,56 @@ class OrderRepository extends BaseRepository{
 			WHERE id=$id";
 
 		if ($conn->query($sql) === TRUE) {
-		    return true;
-		} 
+			return true;
+		}
 		echo "Error: " . $sql . PHP_EOL . $conn->error;
 		return false;
 	}
 
-	function delete($order) {
+	function delete($order)
+	{
 		global $conn;
 		$orderItemRepository = new OrderItemRepository();
 		$orderItems = $order->getOrderItems();
+		
+		// Xóa các mục đơn hàng
 		foreach ($orderItems as $orderItem) {
 			if (!$orderItemRepository->delete($orderItem)) {
-				echo "Error: " . $sql . PHP_EOL . $conn->error;
+				echo "Error deleting order item";
 				return false;
 			}
-			
 		}
-		
+	
+		// Sử dụng Prepared Statements để tránh SQL injection
 		$id = $order->getId();
-		$sql = "DELETE FROM `order` WHERE id=$id";
-		if ($conn->query($sql) === TRUE) {
-		    return true;
-		} 
-		echo "Error: " . $sql . PHP_EOL . $conn->error;
-		return false;
+		$sql = "DELETE FROM `order` WHERE id=?";
+		$stmt = $conn->prepare($sql);
+		$stmt->bind_param("i", $id);
+	
+		// Thực thi câu lệnh
+		if ($stmt->execute()) {
+			return true;
+		} else {
+			echo "Error deleting order: " . $conn->error;
+			return false;
+		}
 	}
+	
 
-	function getBy($array_conds = array(), $array_sorts = array(), $page = null, $qty_per_page = null) {
+	function getBy($array_conds = array(), $array_sorts = array(), $page = null, $qty_per_page = null)
+	{
 		if ($page) {
 			$page_index = $page - 1;
 		}
-		
+
 		$temp = array();
-		foreach($array_conds as $column => $cond) {
+		foreach ($array_conds as $column => $cond) {
 			$type = $cond['type'];
 			$val = $cond['val'];
 			$str = "$column $type ";
 			if (in_array($type, array("BETWEEN", "LIKE"))) {
 				$str .= "$val";
-			}
-			else {
+			} else {
 				$str .= "'$val'";
 			}
 			$temp[] = $str;
@@ -155,13 +167,13 @@ class OrderRepository extends BaseRepository{
 		}
 
 		$temp = array();
-		foreach($array_sorts as $key => $sort) {
+		foreach ($array_sorts as $key => $sort) {
 			$temp[] = "$key $sort";
 		}
 		$sort = null;
 
 		if (count($array_sorts)) {
-			$sort = "ORDER BY ". implode(" , ", $temp);
+			$sort = "ORDER BY " . implode(" , ", $temp);
 		}
 
 		$limit = null;
@@ -169,7 +181,7 @@ class OrderRepository extends BaseRepository{
 			$start = $page_index * $qty_per_page;
 			$limit = "LIMIT $start, $qty_per_page";
 		}
-		
+
 
 		return $this->fetchAll($condition, $sort, $limit);
 	}

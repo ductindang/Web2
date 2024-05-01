@@ -76,8 +76,8 @@ class OrderController {
 		$provinceRepository = new ProvinceRepository();
 		$provinces = $provinceRepository->getAll();
 		$data = [];
-		$data["shipping_name"] = $customer->getName();
-		$data["shipping_mobile"] = $customer->getMobile();
+		$data["shipping_name"] = $customer->getShippingName();
+		$data["shipping_mobile"] = $customer->getShippingMobile();
 		$data["housenumber_street"] = $customer->getHousenumberStreet();
 		$data["provinces"] = [];
 		$data["districts"] = [];

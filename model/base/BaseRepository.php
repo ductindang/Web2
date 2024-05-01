@@ -1,13 +1,9 @@
-<?php
-    class BaseRepository{
-        // chỉ truy cập bên trong lớp hoặc các lớp con kế thừa
-        protected $error;
+<?php 
+class BaseRepository {
+	protected $error;
 
-        function getError(){
-            // Lấy dữ liệu lỗi
-            return $this->error;
-        }
-    }
-
-
+	function getError() {
+		return $this->error;
+	}
+}
 ?>

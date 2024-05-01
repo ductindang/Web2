@@ -65,7 +65,7 @@
 
                             <li class="nav-item">
 
-                                <a class="nav-item nav-link active" href="<?= $baseUrl ?>dashboard.php">
+                                <a class="nav-item nav-link active" href="<?= $baseUrl ?>index.php">
                                     <i class="bi bi-house-fill"></i>
                                     DASHBOARD
                                 </a>

@@ -1,5 +1,4 @@
 <?php
-
 class WardRepository {
 
 	protected function fetchAll($condition = null, $order = null)
