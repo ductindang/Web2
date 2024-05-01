@@ -98,25 +98,22 @@ class Product {
         return 10;
     }
 
-    // function getCategory() {
-	// 	$categoryRepository = new CategoryRepository();
-	// 	$category = $categoryRepository->find($this->category_id);
-	// 	return $category;     
-	// }
-    // function getBrand() {
-	// 	$brandRepository = new BrandRepository();
-	// 	$brand = $brandRepository->find($this->brand_id);
-	// 	return $brand;
+    function getCategory() {
+		$categoryRepository = new CategoryRepository();
+		$category = $categoryRepository->find($this->category_id);
+		return $category;     
+	}
+    function getBrand() {
+		$brandRepository = new BrandRepository();
+		$brand = $brandRepository->find($this->brand_id);
+		return $brand;
 
-	// }
-
-	
-
-	// function getComments() {
-	// 	$commentRepository = new CommentRepository();
-	// 	$comments = $commentRepository->getByProductId($this->id);
-	// 	return $comments;
-	// }
+	}
+	function getComments() {
+		$commentRepository = new CommentRepository();
+		$comments = $commentRepository->getByProductId($this->id);
+		return $comments;
+	}
     // Setters (if needed)
 }
 ?>

@@ -1,5 +1,4 @@
 <?php
-
 class ProvinceRepository {
 
 	protected function fetchAll($condition = null)
