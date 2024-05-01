@@ -1,4 +1,5 @@
 <?php 
+require "../vendor/firebase/php-jwt/src/JWT.php";
 use Firebase\JWT\JWT;
 class CustomerController {
 	function info() {
@@ -64,53 +65,53 @@ class CustomerController {
 		header("location: index.php?c=customer&a=shipping");
 	}
 
-	// function forgotPassword() {
-	// 	//Gởi email để reset tài khoản
-	// 	$email = $_POST["email"];
-	// 	//check email existing
-	// 	$customerRepository = new CustomerRepository();
-	// 	$customer = $customerRepository->findEmail($email);
-	// 	if (!$customer) {
-	// 		$_SESSION["error"] = "$email không tồn tại";
-	// 		header("location: index.php");
-	// 		exit;
-	// 	}
-	// 	$mailServer = new MailService();
+	function forgotPassword() {
+		//Gởi email để reset tài khoản
+		$email = $_POST["email"];
+		//check email existing
+		$customerRepository = new CustomerRepository();
+		$customer = $customerRepository->findEmail($email);
+		if (!$customer) {
+			$_SESSION["error"] = "$email không tồn tại";
+			header("location: index.php");
+			exit;
+		}
+		$mailServer = new MailService();
 
-	// 	$key = JWT_KEY;
-	// 	$payload = array(
-	// 		"email" => $email
-	// 	);
-	// 	$code = JWT::encode($payload, $key);
-	// 	$activeUrl= get_domain_site(). "/index.php?c=customer&a=resetPassword&code=$code";
-	// 	$content = "
-	// 		Chào $email, <br>
-	// 		Vui lòng click vào click vào link bên dưới để thiết lập lại password <br>
-	// 		<a href='$activeUrl'>Reset Password</a>
-	// 	";
-	// 	$mailServer->send($email, "Reset Password", $content);
-	// 	$_SESSION["success"] = "Vui lòng check email để reset password";
-	// 	header("location: index.php");
-	// }
+		$key = JWT_KEY;
+		$payload = array(
+			"email" => $email
+		);
+		$code = JWT::encode($payload, $key);
+		$activeUrl= get_domain_site(). "/index.php?c=customer&a=resetPassword&code=$code";
+		$content = "
+			Chào $email, <br>
+			Vui lòng click vào click vào link bên dưới để thiết lập lại password <br>
+			<a href='$activeUrl'>Reset Password</a>
+		";
+		$mailServer->send($email, "Reset Password", $content);
+		$_SESSION["success"] = "Vui lòng check email để reset password";
+		header("location: index.php");
+	}
 
-	// function resetPassword() {
-	// 	$code = $_GET["code"];
-    //     try {
-    //         $decoded = JWT::decode($code, JWT_KEY, array('HS256'));
-    //         $email = $decoded->email;
-    //         $customerRepository = new CustomerRepository();
-    //         $customer = $customerRepository->findEmail($email);
-    //         if (!$customer) {
-    //             $_SESSION["error"] = "Email $email không tồn tại";
-    //             header("location: /");
-    //         }
-    //         require "view/customer/resetPassword.php";
-	// 		// echo "No error";
-    //     }
-    //     catch(Exception $e) {
-    //         echo "You try hack!";
-    //     }
-	// }
+	function resetPassword() {
+		$code = $_GET["code"];
+        try {
+            $decoded = JWT::decode($code, JWT_KEY, array('HS256'));
+            $email = $decoded->email;
+            $customerRepository = new CustomerRepository();
+            $customer = $customerRepository->findEmail($email);
+            if (!$customer) {
+                $_SESSION["error"] = "Email $email không tồn tại";
+                header("location: /");
+            }
+            require "view/customer/resetPassword.php";
+			// echo "No error";
+        }
+        catch(Exception $e) {
+            echo "You try hack!";
+        }
+	}
 
 	// function updatePassword() {
 	// 	$code = $_POST["code"];
