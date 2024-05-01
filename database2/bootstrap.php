@@ -20,25 +20,44 @@
 
     
 
-    // trả về tên host của trang web hiện tại.
-    function get_host_name(){
+    // // trả về tên host của trang web hiện tại.
+    // function get_host_name() {
+    //     return $_SERVER['HTTP_HOST'];
+    // }
+    // // xác định đường dẫn https hay http
+    // function getProtocol(){
+    //     $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http//";
+    //     return $protocol;
+    // }
+
+    // // tạo ra địa chỉ domain tuyệt đối của trang web hiện tại
+    // function get_domain(){
+    //     $protocol = getProtocol();
+    //     return $protocol . $_SERVER['HTTP_HOST'];
+    // }
+
+    // function get_domain_site(){
+    //     return get_domain() . "/php-shopkimi/site";
+    // }
+
+    //godashop.com
+    function get_host_name() {
         return $_SERVER['HTTP_HOST'];
     }
-
-    // xác định đường dẫn https hay http
-    function getProtocol(){
-        $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http//";
+    //http://
+    function getProtocol() {
+        $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
         return $protocol;
     }
 
-    // tạo ra địa chỉ domain tuyệt đối của trang web hiện tại
+    //http://godashop.com
     function get_domain(){
         $protocol = getProtocol();
         return $protocol . $_SERVER['HTTP_HOST'];
     }
-
+    //http://godashop.com/site
     function get_domain_site(){
-        return get_domain() . "/site";
+        return get_domain() . "/php-shopkimi/site";
     }
 
 ?>
