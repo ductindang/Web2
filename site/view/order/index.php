@@ -19,7 +19,9 @@
                     <div class="clearfix"></div>
                     <div class="col-md-12">
                         <!-- Mỗi đơn hàng -->
-                        <?php foreach ($orders as $order): ?>
+                        <?php
+                        
+                         foreach ($orders as $order): ?>
                         <div class="row">
                             <div class="col-md-12">
                                 <h5>Đơn hàng <a

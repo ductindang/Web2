@@ -165,19 +165,20 @@ class ProductRepository extends BaseRepository
         $featured = $product->getFeatured();
 
         $sql = "UPDATE product SET 
-            name='$name',
-            price=$price,
-            featured_image='$featured_image',
-            inventory_qty=$inventory_qty,
-            category_id=$category_id,
-            brand_id=$brand_id,
-            created_date='$created_date',
-            description='$description',
-            enter_price=$enter_price,
-            deleted=$deleted,
-            updated_at='$updated_at'
-            featured='$featured'
-            WHERE id=$id";
+        name='$name',
+        price=$price,
+        featured_image='$featured_image',
+        inventory_qty=$inventory_qty,
+        category_id=$category_id,
+        brand_id=$brand_id,
+        created_date='$created_date',
+        description='$description',
+        enter_price=$enter_price,
+        deleted=$deleted,
+        updated_at='$updated_at',
+        featured='$featured'
+        WHERE id=$id";
+
 
         if ($conn->query($sql) === TRUE) {
             return true;

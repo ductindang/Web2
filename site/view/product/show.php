@@ -26,10 +26,7 @@
                                 <div class="item thumbnail"><img src="../upload/<?=$product->getFeaturedImage()?>"
                                         alt="">
                                 </div>
-                                <?php foreach($product->getImageItems() as $imageItem): ?>
-                                <div class="item thumbnail"><img src="../upload/<?=$imageItem->getName()?>" alt="">
-                                </div>
-                                <?php endforeach ?>
+                               
                             </div>
                         </div>
                     </div>
@@ -70,12 +67,10 @@
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs" role="tablist">
                                 <li role="presentation" class="active">
-                                    <a href="#product-description" aria-controls="home" role="tab" data-toggle="tab">Mô
-                                        tả</a>
+                                    <a href="#product-description" aria-controls="home" role="tab" data-toggle="tab">Mô tả</a>
                                 </li>
                                 <li role="presentation">
-                                    <a href="#product-comment" aria-controls="tab" role="tab" data-toggle="tab">Đánh
-                                        giá</a>
+                                    <a href="#product-comment" aria-controls="tab" role="tab" data-toggle="tab">Đánh giá</a>
                                 </li>
                             </ul>
                             <!-- Tab panes -->
@@ -110,6 +105,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="row product-related equal">
                     <div class="col-md-12">
                         <h4 class="text-center">Sản phẩm liên quan</h4>

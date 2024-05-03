@@ -1,5 +1,5 @@
 <?php
-define('HOST','localhost:3306');
+define('HOST','localhost:3308');
 define('DATABASE','webnangcao');
 define('USERNAME','root');
 define('PASSWORD','');

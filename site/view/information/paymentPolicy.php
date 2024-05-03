@@ -23,16 +23,16 @@
                             lòng chuyển khoản tổng giá trị đơn hàng qua tài khoản sau đây:</span></p>
 
                     <p><span>Thông tin chuyển khoản:</span></p>
-                    <p><span>Tên chủ tài khoản: Võ Văn Danh</span><span><br></span> <span>Số tài khoản:
-                            101867509720</span><span><br></span> <span>Ngân hàng: Vietinbank</span><span><br></span>
-                        <span>Chi nhánh: Thủ Đức TP.Hồ Chí Minh</span></p>
+                    <p><span>Tên chủ tài khoản: Đặng Đức Tin</span><span><br></span> <span>Số tài khoản:
+                            0387589568</span><span><br></span> <span>Ngân hàng: Agribank, ViettinBank</span><span><br></span>
+                        <span>Chi nhánh: Quận 5 TP.Hồ Chí Minh</span></p>
                     <p><span> Lưu ý: Khi bạn chuyển khoản, vui lòng nhập tên người mua hàng.</span></p>
                     <p><span>Sau khi bạn đã thanh toán và chuyển khoản xong, chúng tôi sẽ giao hàng đến cho bạn theo
                             thời gian quy định tại “Chính sách giao hàng” của chúng tôi.</span><span><br><br></span></p>
                     <p><b>Thanh toán khi nhận hàng (COD - Cash On Delivery)</b></p>
                     <p><span>Với hình thức thanh toán khi nhận hàng, bạn sẽ chỉ thanh toán khi đơn hàng đến tay của bạn
                             và bạn chỉ cần trả đúng số tiền in trên hóa đơn. Nếu bạn thấy giá trị trên hóa đơn không
-                            chính xác, bạn vui lòng liên hệ lại ngay cho chúng tôi qua số Hotline: 076.276.7356</span>
+                            chính xác, bạn vui lòng liên hệ lại ngay cho chúng tôi qua số Hotline: 039.687.5451</span>
                     </p>
                 </div>
 

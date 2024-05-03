@@ -27,7 +27,10 @@ require_once "../model/orderItem/OrderItem.php";
 require_once "../model/orderItem/OrderItemRepository.php";
 require_once "../model/order/Order.php";
 require_once "../model/order/OrderRepository.php";
-
+require_once "../model/status/Status.php";
+require_once "../model/status/StatusRepository.php";
+require_once "../model/staff/Staff.php";
+require_once "../model/staff/StaffRepository.php";
 
 
 // trả về tên host của trang web hiện tại.
