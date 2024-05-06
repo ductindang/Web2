@@ -67,7 +67,7 @@
                                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu">
                                     <li><a href="index.php?c=customer&a=info">Thông tin tài khoản</a></li>
                                     <li><a href="index.php?c=customer&a=shipping">Địa chỉ giao hàng</a></li>
-                                    <li><a href="index.php?c=order&a=index">Đơn hàng của tôi</a></li>
+                                    <li><a href="index.php?c=order&a=list">Đơn hàng của tôi</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="index.php?c=login&a=logout">Thoát</a></li>
                                 </ul>

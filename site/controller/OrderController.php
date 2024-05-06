@@ -1,13 +1,19 @@
-<?php 
-class OrderController {
-	function list() {
+<?php
+class OrderController
+{
+	function index(){
+		include 'view/order/index.php';
+	}
+	function list()
+	{
 		$page_title = "Danh sách đơn hàng";
 		$orderRepository = new OrderRepository();
 		$orders = $orderRepository->getAll();
 		include "view/order/list.php";
 	}
 
-	function add() {
+	function add()
+	{
 		$page_title = "Tạo đơn hàng";
 		$customerRepository = new CustomerRepository();
 		$customers = $customerRepository->getAll();
@@ -20,24 +26,25 @@ class OrderController {
 
 		$staffRepository = new StaffRepository();
 		$staffs = $staffRepository->getAll();
-		
+
 		include "view/order/add.php";
 	}
 
-	function save() {
+	function save()
+	{
 		//Create order
 
 		$data = array();
 		$data["created_date"] = date("Y-m-d H:m:s");
 		$data["order_status_id"] = $_POST["status"];
-		$data["staff_id"] = $_POST["staff"];
+		// $data["staff_id"] = $_POST["staff"];
 		$data["customer_id"] = $_POST["customer"];
-		$data["shipping_fullname"] = $_POST["shipping_name"];
-		$data["shipping_mobile"] = $_POST["shipping_mobile"];
-		$data["payment_method"] = $_POST["payment_method"]; 
-		$data["shipping_ward_id"] = $_POST["ward"]; 
-		$data["shipping_housenumber_street"] = $_POST["housenumber_street"]; 
-		$data["shipping_fee"] = $_POST["shipping_fee"]; 
+		$data["cus_fullname"] = $_POST["fullname"];
+		$data["cus_mobile"] = $_POST["mobile"];
+		$data["payment_method"] = $_POST["payment_method"];
+		$data["shipping_ward_id"] = $_POST["ward"];
+		$data["shipping_housenumber_street"] = $_POST["housenumber_street"];
+		$data["shipping_fee"] = $_POST["shipping_fee"];
 		$data["delivered_date"] = $_POST["delivered_date"];
 		$orderRepository = new OrderRepository();
 		$productRepository = new ProductRepository();
@@ -47,7 +54,7 @@ class OrderController {
 
 			//save into order detail
 			$orderDetailRepository = new OrderItemRepository();
-			for ($i=0; $i <= count($product_ids) - 1; $i++) {
+			for ($i = 0; $i <= count($product_ids) - 1; $i++) {
 				$detail_data = array();
 				$detail_data["order_id"] = $order_id;
 				$detail_data["product_id"] = $product_ids[$i];
@@ -57,18 +64,20 @@ class OrderController {
 				$detail_data["unit_price"] = $product->getSalePrice();
 				$detail_data["total_price"] = $product->getSalePrice() * $qties[$i];
 
-				if(!$orderDetailRepository->save($detail_data)) {
+				if (!$orderDetailRepository->save($detail_data)) {
 					exit();
 				}
-
 			}
-			
+			$orderRepository->saveMoney($order_id, $detail_data["total_price"]);
+
+
 			header("location:index.php?c=order");
 			exit;
 		}
 	}
 
-	function ajaxGetShippingInfoDefault() {
+	function show()
+	{
 		$customer_id = $_GET["customer_id"];
 		$customerRepository = new CustomerRepository();
 		$customer = $customerRepository->find($customer_id);
@@ -98,7 +107,7 @@ class OrderController {
 				$data["wards"][] = ["id" => $w->getId(), "name" => $w->getName()];
 			}
 
-			$districts = $province->getDistricts();  
+			$districts = $province->getDistricts();
 
 			foreach ($districts as $d) {
 				$data["districts"][] = ["id" => $d->getId(), "name" => $d->getName()];
@@ -111,7 +120,8 @@ class OrderController {
 		echo json_encode($data);
 	}
 
-	function delete() {
+	function delete()
+	{
 		$order_id = $_GET["order_id"];
 		$orderRepository = new OrderRepository();
 		$order = $orderRepository->find($order_id);
@@ -121,42 +131,43 @@ class OrderController {
 		}
 	}
 
-	function confirm(){
+	function confirm()
+	{
 		$order_id = $_GET["order_id"];
 		$orderRepository = new OrderRepository();
 		$order = $orderRepository->find($order_id);
-		$order->setStatusId(2);//xác nhận đơn hàng
+		$order->setStatus(2); //xác nhận đơn hàng
 		$staffRepository = new StaffRepository();
 		$staff = $staffRepository->findUsername($_SESSION["username"]);
 		$staff_id = $staff->getId();
-		$order->setStaffId($staff_id);//người xác nhận là người có trách nhiệm trên đơn hàng
+		// $order->setStaffId($staff_id);//người xác nhận là người có trách nhiệm trên đơn hàng
 		if ($orderRepository->update($order)) {
 			header("location: index.php?c=order");
 			exit;
 		}
 	}
 
-	function cancel(){
+	function cancel()
+	{
 		$order_id = $_GET["order_id"];
 		$orderRepository = new OrderRepository();
 		$order = $orderRepository->find($order_id);
-		$order->setStatusId(6);//hủy đơn hàng
+		$order->setStatus(6); //hủy đơn hàng
 		$staffRepository = new StaffRepository();
 		$staff = $staffRepository->findUsername($_SESSION["username"]);
 		$staff_id = $staff->getId();
-		$order->setStaffId($staff_id);//người hủy là người có trách nhiệm trên đơn hàng
+		// $order->setStaffId($staff_id);//người hủy là người có trách nhiệm trên đơn hàng
 		if ($orderRepository->update($order)) {
 			$orderItem = $order->getOrderItems();
-			foreach ($orderItem as $orderItem):
+			foreach ($orderItem as $orderItem) :
 				$product = $orderItem->getProduct();
 			endforeach;
 			$inventoryQty = $product->getInventoryQty() + $orderItem->getQty();
-        	$product->setInventoryQty($inventoryQty);
-       	 	$productRepository =  new ProductRepository();
-        	$productRepository->update($product);
+			$product->setInventoryQty($inventoryQty);
+			$productRepository =  new ProductRepository();
+			$productRepository->update($product);
 			header("location: index.php?c=order");
 			exit;
 		}
 	}
 }
-?>

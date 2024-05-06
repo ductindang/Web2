@@ -12,6 +12,7 @@ $c = $_GET["c"] ?? "home";
 $a = $_GET["a"] ?? "index";
 $controllerName = ucfirst($c). "Controller";//StudentController
 require "controller/" . $controllerName . ".php";
-$controller = new $controllerName();//new StudentController();
-$controller->$a();//$controller->list();
+$controller = new $controllerName();
+$controller->$a();
+// $controller->list();
 ?>

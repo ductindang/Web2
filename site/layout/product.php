@@ -1,6 +1,6 @@
 <div style="position: relative; height:360px; width: 100%;" class="product-container text-center box-sd">
     <div style="height: 260px; display: flex; padding-top: 20px;" class="image">
-        <img  class="img-responsive" src="../upload/<?=$product->getFeaturedImage()?>" alt="" style="margin: auto;" >
+        <img  class="img-responsive" src="../assess/img/<?=$product->getFeaturedImage()?>" alt="" style="margin: auto;" >
     </div>
     <div class="product-meta">
         <h5 style="min-height: 32px; display: flex;" class="name">
