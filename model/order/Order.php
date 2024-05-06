@@ -42,36 +42,26 @@ class Order
 		return $this->created_date;
 	}
 
-	function getStaffId()
-	{
-		return $this->staff_id;
-	}
 
 	function getCustomerId()
 	{
 		return $this->user_id;
 	}
 
-	function getShippingFullname()
+	function getCustomerFullname()
 	{
-		return $this->shipping_fullname;
+		return $this->cus_fullname;
 	}
-
-
 
 	function getPaymentMethod()
 	{
 		return $this->payment_method;
 	}
 
-	function getShippingWardId()
-	{
-		return $this->shipping_ward_id;
-	}
 
 	function getShippingHousenumberStreet()
 	{
-		return $this->shipping_housenumber_street;
+		return $this->cus_address;
 	}
 
 	function getShippingFee()
@@ -96,27 +86,15 @@ class Order
 		return $this;
 	}
 
-	function setStaffId($staff_id)
-	{
-		$this->staff_id = $staff_id;
-		return $this;
-	}
-
 	function setCustomerId($user_id)
 	{
 		$this->user_id = $user_id;
 		return $this;
 	}
 
-	function setShippingFullname($shipping_fullname)
+	function setShippingMobile($cus_mobile)
 	{
-		$this->shipping_fullname = $shipping_fullname;
-		return $this;
-	}
-
-	function setShippingMobile($shipping_mobile)
-	{
-		$this->shipping_mobile = $shipping_mobile;
+		$this->cus_mobile = $cus_mobile;
 		return $this;
 	}
 
@@ -126,17 +104,7 @@ class Order
 		return $this;
 	}
 
-	function setShippingWardId($shipping_ward_id)
-	{
-		$this->shipping_ward_id = $shipping_ward_id;
-		return $this;
-	}
 
-	function setShippingHousenumberStreet($shipping_housenumber_street)
-	{
-		$this->shipping_housenumber_street = $shipping_housenumber_street;
-		return $this;
-	}
 
 	function setShippingFee($shipping_fee)
 	{
@@ -158,13 +126,6 @@ class Order
 		return $status;
 	}
 
-	function getStaff()
-	{
-		if (empty($this->staff_id)) return null;
-		$staffRepository = new StaffRepository();
-		$staff = $staffRepository->find($this->staff_id);
-		return $staff;
-	}
 
 	function getCustomer()
 	{
@@ -173,13 +134,6 @@ class Order
 		return $customer;
 	}
 
-	function getShippingWard()
-	{
-		if (empty($this->shipping_ward_id)) return null; // Kiểm tra nếu shipping_ward_id là null thì không cần thực hiện truy vấn
-		$wardRepository = new WardRepository();
-		$ward = $wardRepository->find($this->shipping_ward_id);
-		return $ward;
-	}
 
 	function getOrderItems()
 	{

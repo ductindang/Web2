@@ -18,7 +18,7 @@ class OrderRepository extends BaseRepository
 
 		if ($result->num_rows > 0) {
 			while ($row = $result->fetch_assoc()) {
-				$order = new Order($row["id"], $row["created_date"], $row["order_status_id"], $row["staff_id"], $row["customer_id"], $row["shipping_fullname"], $row["shipping_mobile"], $row["payment_method"], $row["shipping_ward_id"], $row["shipping_housenumber_street"], $row["shipping_fee"], $row["delivered_date"]);
+				$order = new Order($row["id"], $row["created_date"], $row["status"], $row["user_id"], $row["payment_method"], $row["shipping_fee"], $row["cus_fullname"], $row["cus_mobile"], $row["cus_address"], $row["delivered_date"], $row["total_money"]);
 				$orders[] = $order;
 			}
 		}
@@ -52,22 +52,17 @@ class OrderRepository extends BaseRepository
 	{
 		global $conn;
 		$created_date = $data["created_date"];
-		$order_status_id = $data["order_status_id"];
-		$staff_id = $data["staff_id"];
-		$customer_id = $data["customer_id"];
-		$shipping_fullname = $data["shipping_fullname"];
-		$shipping_mobile = $data["shipping_mobile"];
+		$status = $data["status"];
+		$user_id = $data["user_id"];
+		$cus_mobile = $data["cus_mobile"];
+		$cus_fullname = $data["cus_fullname"];
+		$cus_address = $data["cus_address"];
 		$payment_method = $data["payment_method"];
-		$shipping_ward_id = $data["shipping_ward_id"];
-		$shipping_housenumber_street = $data["shipping_housenumber_street"];
 		$shipping_fee = $data["shipping_fee"];
 		$delivered_date = $data["delivered_date"];
 
-		if (empty($staff_id)) {
-			$staff_id = "NULL";
-		}
 
-		$sql = "INSERT INTO `order` (created_date, status, user_id, payment_method, shipping_fee, delivered_date, cus_fullname, cus_mobile, cus_address, total_money)  VALUES ('$created_date', $order_status_id, $customer_id, '$payment_method', '$shipping_fee', '$delivered_date', '$shipping_fullname', '$shipping_mobile', $shipping_fee, '$delivered_date')";
+		$sql = "INSERT INTO `order` (created_date, status, user_id, payment_method, shipping_fee, delivered_date, cus_fullname, cus_mobile, cus_address) VALUES ('$created_date', $status, $user_id, '$payment_method', '$shipping_fee', '$delivered_date', '$cus_fullname', '$cus_mobile', '$cus_address')";
 		if ($conn->query($sql) === TRUE) {
 			$last_id = $conn->insert_id; //chỉ cho auto increment
 			return $last_id;
@@ -75,34 +70,45 @@ class OrderRepository extends BaseRepository
 		echo "Error: " . $sql . PHP_EOL . $conn->error;
 		return false;
 	}
-
+	function saveMoney($order_id, $total_money)
+	{
+		global $conn;
+		$sql = "UPDATE `order` SET total_money = '$total_money' WHERE id = $order_id";
+		if ($conn->query($sql) === TRUE) {
+			return true;
+		}
+		echo "Error: " . $sql . PHP_EOL . $conn->error;
+		return false;
+	}
+	
+	
 	function update($order)
 	{
 		global $conn;
 		$id = $order->getId();
 		$created_date = $order->getCreatedDate();
-		$order_status_id = $order->getStatusId();
+		$status = $order->getStatusId();
 		$staff_id = $order->getStaffId();
 		$customer_id = $order->getCustomerId();
-		$shipping_fullname = $order->getShippingFullname();
-		$shipping_mobile = $order->getShippingMobile();
+		$cus_mobile = $order->getShippingMobile();
+		$cus_fullname = $order->getCustomerFullname();
 		$payment_method = $order->getPaymentMethod();
-		$shipping_ward_id = $order->getShippingWardId();
-		$shipping_housenumber_street = $order->getShippingHousenumberStreet();
+		$cus_address = $order->getShippingHousenumberStreet();
 		$shipping_fee = $order->getShippingFee();
 		$delivered_date = $order->getDeliveredDate();
+		$total_money = $order->getTotalMoney();
 		$sql = "UPDATE `order` SET 
 			created_date='$created_date', 
-			order_status_id=$order_status_id, 
+			status=$status, 
 			staff_id=$staff_id, 
 			customer_id=$customer_id,  
-			shipping_fullname='$shipping_fullname', 
-			shipping_mobile='$shipping_mobile', 
+			cus_fullname='$cus_fullname', 
+			cus_mobile='$cus_mobile', 
 			payment_method=$payment_method, 
-			shipping_ward_id='$shipping_ward_id', 
-			shipping_housenumber_street='$shipping_housenumber_street',
-			shipping_fee=$shipping_fee,
+			cus_address='$cus_address',
 			delivered_date='$delivered_date'
+			shipping_fee=$shipping_fee,
+			total_money=$total_money,
 			WHERE id=$id";
 
 		if ($conn->query($sql) === TRUE) {
@@ -117,7 +123,7 @@ class OrderRepository extends BaseRepository
 		global $conn;
 		$orderItemRepository = new OrderItemRepository();
 		$orderItems = $order->getOrderItems();
-		
+
 		// Xóa các mục đơn hàng
 		foreach ($orderItems as $orderItem) {
 			if (!$orderItemRepository->delete($orderItem)) {
@@ -125,13 +131,13 @@ class OrderRepository extends BaseRepository
 				return false;
 			}
 		}
-	
+
 		// Sử dụng Prepared Statements để tránh SQL injection
 		$id = $order->getId();
 		$sql = "DELETE FROM `order` WHERE id=?";
 		$stmt = $conn->prepare($sql);
 		$stmt->bind_param("i", $id);
-	
+
 		// Thực thi câu lệnh
 		if ($stmt->execute()) {
 			return true;
@@ -140,7 +146,7 @@ class OrderRepository extends BaseRepository
 			return false;
 		}
 	}
-	
+
 
 	function getBy($array_conds = array(), $array_sorts = array(), $page = null, $qty_per_page = null)
 	{

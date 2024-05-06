@@ -8,7 +8,6 @@
         protected $password;
         protected $updated_at;
         protected $created_at;
-        
         protected $is_active;
         protected $address;
         protected $ward_id;

@@ -41,7 +41,10 @@ class Product
     {
         return $this->id;
     }
-
+    function setFeatured(int $x)
+    {
+        return $this->featured = $x;
+    }
     function getDiscountId()
     {
         return $this->discount_id;
