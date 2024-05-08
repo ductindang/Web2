@@ -1,7 +1,7 @@
 <div style="position: relative; height:380px; width: 100%;" class="product-container text-center box-sd">
     <div style="height: 260px; display: flex; padding-top: 20px;" class="image">
-        <img  class="img-responsive" src="../upload/<?=$product->getFeaturedImage()?>" alt="" style="margin: auto;" >
-    </div>
+        <img  class="img-responsive" src="../../assets/img/<?=$product->getFeaturedImage()?>" alt="" style="margin: auto;" >
+    </div>z
     <div class="product-meta">
         <h5 style="min-height: 32px; display: flex;" class="name">
             <a style="margin: auto; padding: 0 12px; font-size:13px" class="product-name" href="index.php?c=product&a=show&id=<?=$product->getId()?>"

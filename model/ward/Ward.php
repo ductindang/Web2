@@ -1,5 +1,4 @@
 <?php
-
 class Ward {
 	protected $id;
 	protected $name;

@@ -1,8 +1,7 @@
-<?php require "layout/header.php"?>
-
+<?php require "layout/header.php" ?>
 <div class="slideshow container-fluid">
     <div class="row">
-        <div id="myCarousel" class="carousel slide" data-ride="carsousel">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
             <!-- Indicators -->
             <ol class="carousel-indicators">
                 <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -31,13 +30,10 @@
                 <span class="sr-only">Next</span>
             </a>
         </div>
-
     </div>
 </div>
-
-<!-- END SLIDERSHOW -->
+<!-- END SLIDESHOW -->
 <!-- SERVICES -->
-
 
 <main id="maincontent" class="page-main">
     <div class="container">
@@ -45,7 +41,6 @@
             <div class="col-xs-12 text-center">
                 <h4 class="home-title">Sản phẩm nổi bật</h4>
             </div>
-            <!-- Gọi từ HomeController -->
             <?php foreach ($featuredProducts as $product): ?>
             <div class="col-xs-6 col-sm-3 container1">
                 <?php require "layout/product.php" ?>
@@ -64,6 +59,4 @@
         </div>
     </div>
 </main>
-
-
-<?php require "layout/footer.php"?>
+<?php require "layout/footer.php" ?>

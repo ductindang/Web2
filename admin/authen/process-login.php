@@ -12,14 +12,14 @@ if (!empty($_POST)) {
     if ($userExist == null) {
         $msg = 'Đăng nhập không thành công';
     } else {
-       $token = getSecurityMD5($userExist[0]['email'].time());
-		setcookie('token', $token, time() + 7 * 24 * 60 * 60, '/');
-		$created_at = date('Y-m-d H:i:s');
+        $token = getSecurityMD5($userExist[0]['email'] . time());
+        setcookie('token', $token, time() + 7 * 24 * 60 * 60, '/');
+        $created_at = date('Y-m-d H:i:s');
 
-		$_SESSION['user'] = $userExist;
+        $_SESSION['user'] = $userExist;
 
-        $userID= $userExist[0]['id'];
-        $_SESSION['user']=$userExist;
+        $userID = $userExist[0]['id'];
+        $_SESSION['user'] = $userExist;
         //$sql="insert into token (user_id,token,created_at) values ('$user_id','$token','$created_at')";
         //  execute($sql);
 
@@ -31,13 +31,14 @@ if (!empty($_POST)) {
         } else {
             $user =  mysqli_fetch_assoc($result);
             $userPrivileges = executeResult("SELECT * FROM `user_role` INNER JOIN `role_con` ON user_role.role_con_id=role_con.id WHERE user_role.user_id= " . $user['id']);
+            echo "console.log($userPrivileges)";
             if (!empty($userPrivileges)) {
                 $user['privileges'] = array();
                 foreach ($userPrivileges as $privilege) {
                     $user['privileges'][] = $privilege['url_match'];
                 }
             }
-          
+
             $_SESSION['current_user'] = $user;
             if ($user['role_id'] == 4) {
                 // Nếu là user, chuyển hướng đến trang user
@@ -49,8 +50,7 @@ if (!empty($_POST)) {
         }
         // Kết thúc phân quyền
 
-        // header('Location: ../dashboard.php');
+        // header('Location: ../index.php');
         die();
     }
 }
-?>

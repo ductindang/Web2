@@ -44,7 +44,7 @@ class Database
            // );
            $privileges = $_SESSION['current_user']['privileges'];
           $privileges = implode("|", $privileges);
-          preg_match('/dashboard\.php$|' . $privileges . '/', $uri, $matches);
+          preg_match('/index\.php$|' . $privileges . '/', $uri, $matches);
           return !empty($matches);
       }
 }

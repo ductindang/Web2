@@ -1,5 +1,6 @@
-<?php 
-class Product {
+<?php
+class Product
+{
     protected $id;
     protected $discount_id;
     protected $name;
@@ -17,7 +18,8 @@ class Product {
 
 
     // Constructor
-    function __construct($id, $discount_id, $name, $price, $featured_image, $inventory_qty, $category_id, $brand_id, $created_date, $description, $enter_price, $deleted, $updated_at, $featured) {
+    function __construct($id, $discount_id, $name, $price, $featured_image, $inventory_qty, $category_id, $brand_id, $created_date, $description, $enter_price, $deleted, $updated_at, $featured)
+    {
         $this->id = $id;
         $this->discount_id = $discount_id;
         $this->name = $name;
@@ -35,88 +37,110 @@ class Product {
     }
 
     // Getters
-    function getId() {
+    function getId()
+    {
         return $this->id;
     }
-
-    function getDiscountId() {
+    function setFeatured(int $x)
+    {
+        return $this->featured = $x;
+    }
+    function getDiscountId()
+    {
         return $this->discount_id;
     }
 
-    function getName() {
+    function getName()
+    {
         return $this->name;
     }
 
-    function getPrice() {
+    function getPrice()
+    {
         return $this->price;
     }
 
-    function getFeaturedImage() {
+    function getFeaturedImage()
+    {
         return $this->featured_image;
     }
 
-    function getInventoryQty() {
+    function getInventoryQty()
+    {
         return $this->inventory_qty;
     }
 
-    function getCategoryId() {
+    function getCategoryId()
+    {
         return $this->category_id;
     }
 
-    function getBrandId() {
+    function getBrandId()
+    {
         return $this->brand_id;
     }
 
-    function getCreatedDate() {
+    function getCreatedDate()
+    {
         return $this->created_date;
     }
 
-    function getDescription() {
+    function getDescription()
+    {
         return $this->description;
     }
 
-    function getEnterPrice() {
+    function getEnterPrice()
+    {
         return $this->enter_price;
     }
 
-    function getDeleted() {
+    function getDeleted()
+    {
         return $this->deleted;
     }
 
-    function getUpdatedAt() {
+    function getUpdatedAt()
+    {
         return $this->updated_at;
     }
-    function getFeatured() {
+    function getFeatured()
+    {
         return $this->featured;
     }
 
-    function getSalePrice() {
-		return $this->price - ($this->price * $this->getDiscountPercentage()) / 100;
-	}
+    function getSalePrice()
+    {
+        return $this->price - ($this->price * $this->getDiscountPercentage()) / 100;
+    }
 
-    function getDiscountPercentage(){
+    function getDiscountPercentage()
+    {
         return 10;
     }
 
-    // function getCategory() {
-	// 	$categoryRepository = new CategoryRepository();
-	// 	$category = $categoryRepository->find($this->category_id);
-	// 	return $category;     
-	// }
-    // function getBrand() {
-	// 	$brandRepository = new BrandRepository();
-	// 	$brand = $brandRepository->find($this->brand_id);
-	// 	return $brand;
-
-	// }
-
-	
-
-	// function getComments() {
-	// 	$commentRepository = new CommentRepository();
-	// 	$comments = $commentRepository->getByProductId($this->id);
-	// 	return $comments;
-	// }
+    function getCategory()
+    {
+        $categoryRepository = new CategoryRepository();
+        $category = $categoryRepository->find($this->category_id);
+        return $category;
+    }
+    function getBrand()
+    {
+        $brandRepository = new BrandRepository();
+        $brand = $brandRepository->find($this->brand_id);
+        return $brand;
+    }
+    function getComments()
+    {
+        $commentRepository = new CommentRepository();
+        $comments = $commentRepository->getByProductId($this->id);
+        return $comments;
+    }
     // Setters (if needed)
+    function setInventoryQty($inventory_qty)
+    {
+        $this->inventory_qty = $inventory_qty;
+        return $this;
+    }
 }
-?>

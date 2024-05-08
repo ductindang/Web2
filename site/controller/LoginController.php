@@ -10,8 +10,6 @@ class LoginController {
         $customer = $customerRepository -> findEmail($email);
         if($customer){
             if ($customer->getRoleID() == 4){
-                echo "User";
-
                 $encodePassword = $customer->getPassword();
                 if($password == $encodePassword){
                 // if(password_verify($password,$encodePassword)){
@@ -26,11 +24,13 @@ class LoginController {
                 }    
                 header("location:index.php"); 
                 exit; 
-            }else{
+            }
+            else{
                 header("Location: ../admin/dashboard.php");
                 exit;
             }
-        }
+            
+    }
         $_SESSION["error"]= "Vui lòng nhập lại email hoặc mật khẩu";
         header("location:index.php");
     }

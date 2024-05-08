@@ -92,7 +92,7 @@ function checkPrivilege($uri = false) {
 	// );
 	$privileges = $_SESSION['current_user']['privileges'];
     $privileges = implode("|", $privileges);
-    preg_match('/dashboard\.php$|' . $privileges . '/', $uri, $matches);
+    preg_match('/index\.php$|' . $privileges . '/', $uri, $matches);
     return !empty($matches);
 }
 // function checkPrivilege($uri = false) {
@@ -102,6 +102,6 @@ function checkPrivilege($uri = false) {
 //     }
 //     $privileges = $_SESSION['user']['privileges'];
 //     $privileges = implode("|", $privileges);
-//     preg_match('/dashboard\.php$|' . $privileges . '/', $uri, $matches);
+//     preg_match('/index\.php$|' . $privileges . '/', $uri, $matches);
 //     return !empty($matches);
 // }
