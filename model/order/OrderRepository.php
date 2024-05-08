@@ -1,13 +1,38 @@
 <?php
 class OrderRepository extends BaseRepository
 {
+	// protected function fetchAll($condition = null, $sort = null)
+	// {
+	// 	global $conn;
+	// 	$orders = array();
+	// 	$sql = "SELECT * FROM `order`";
+	// 	if ($condition) {
+	// 		$sql .= " WHERE  $condition";
+	// 	}
+
+	// 	if ($sort) {
+	// 		$sql .= " $sort";
+	// 	}
+
+	// 	$result = $conn->query($sql);
+
+	// 	if ($result->num_rows > 0) {
+	// 		while ($row = $result->fetch_assoc()) {
+	// 			$order = new Order($row["id"], $row["created_date"], $row["status"], $row["user_id"], $row["payment_method"], $row["shipping_fee"], $row["cus_fullname"], $row["cus_mobile"], $row["cus_address"], $row["delivered_date"], $row["total_money"]);
+	// 			$orders[] = $order;
+	// 		}
+	// 	}
+
+	// 	return $orders;
+	// }
+
 	protected function fetchAll($condition = null, $sort = null)
 	{
 		global $conn;
 		$orders = array();
 		$sql = "SELECT * FROM `order`";
 		if ($condition) {
-			$sql .= " WHERE  $condition";
+			$sql .= " WHERE $condition";
 		}
 
 		if ($sort) {
@@ -16,15 +41,33 @@ class OrderRepository extends BaseRepository
 
 		$result = $conn->query($sql);
 
+		if (!$result) {
+			die("Query failed: " . mysqli_error($conn));
+		}
+
 		if ($result->num_rows > 0) {
 			while ($row = $result->fetch_assoc()) {
-				$order = new Order($row["id"], $row["created_date"], $row["status"], $row["user_id"], $row["payment_method"], $row["shipping_fee"], $row["cus_fullname"], $row["cus_mobile"], $row["cus_address"], $row["delivered_date"], $row["total_money"]);
+				$order = new Order(
+					$row["id"],
+					$row["created_date"],
+					$row["status"],
+					$row["user_id"],
+					$row["payment_method"],
+					$row["shipping_fee"],
+					$row["cus_fullname"],
+					$row["cus_mobile"],
+					$row["cus_address"],
+					$row["delivered_date"],
+					$row["total_money"]
+				);
 				$orders[] = $order;
 			}
 		}
 
 		return $orders;
 	}
+
+	
 
 	function getAll()
 	{
@@ -34,7 +77,7 @@ class OrderRepository extends BaseRepository
 	function getByCustomerId($customer_id)
 	{
 		global $conn;
-		$condition = "customer_id = $customer_id";
+		$condition = "user_id = $customer_id";
 		$sort = "ORDER BY id DESC";
 		return $this->fetchAll($condition, $sort);
 	}
