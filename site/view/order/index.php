@@ -19,23 +19,21 @@
                     <div class="clearfix"></div>
                     <div class="col-md-12">
                         <!-- Mỗi đơn hàng -->
-                        <?php
-                        
-                         foreach ($orders as $order): ?>
+                        <?php foreach ($orders as $order): ?>
                         <div class="row">
                             <div class="col-md-12">
                                 <h5>Đơn hàng <a
                                         href="index.php?c=order&a=show&id=<?=$order->getId()?>">#<?=$order->getId()?></a>
                                 </h5>
                                 <span class="date">
-                                    Đặt hàng ngày <?=$order->getCreatedDate()?> </span>
+                                    Đặt hàng ngày <?=$order->getCreatedDate()?> </span> 
                                 <hr>
                                 <?php foreach ($order->getOrderItems() as $orderItem): 
                                 $product = $orderItem->getProduct();
                                 ?>
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <img src="../upload/<?=$product->getFeaturedImage()?>" alt=""
+                                        <img src="../assets/img/<?=$product->getFeaturedImage()?>" alt=""
                                             class="img-responsive">
                                     </div>
                                     <div class="col-md-3">

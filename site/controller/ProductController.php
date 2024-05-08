@@ -1,6 +1,8 @@
-<?php 
-class ProductController {
-    function index() {
+<?php
+class ProductController
+{
+    function index()
+    {
         $productRepository = new ProductRepository();
         $categoryRepository = new CategoryRepository();
         $item_per_page = ITEM_PER_PAGE;
@@ -22,7 +24,7 @@ class ProductController {
             ];
             $category = $categoryRepository->find($category_id);
             $categoryName = $category->getName();
-        }//SELECT * ... WHERE category_id = 5
+        } //SELECT * ... WHERE category_id = 5
 
         $price_range = $_GET["price-range"] ?? null;
         if ($price_range) {
@@ -44,8 +46,8 @@ class ProductController {
                 ];
                 //SELECT * ... WHERE price >= 1000000
             }
-        }//SELECT * ... WHERE price BETWEEN 100000 AND 200000
-        
+        } //SELECT * ... WHERE price BETWEEN 100000 AND 200000
+
         $sort = $_GET["sort"] ?? null;
         if ($sort) {
             $tmp = explode("-", $sort);
@@ -64,8 +66,8 @@ class ProductController {
                 "name" => [
                     "type" => "LIKE",
                     "val" => "'%$search%'"
-                ] 
-            ];//SELECT * ..... WHERE name LIKE '%$search%'
+                ]
+            ]; //SELECT * ..... WHERE name LIKE '%$search%'
         }
 
         $products = $productRepository->getBy($conds, $sorts, $page, $item_per_page);
@@ -78,10 +80,10 @@ class ProductController {
         $categoryRepository = new CategoryRepository();
         $categories = $categoryRepository->getAll();
         require "view/product/index.php";
-
     }
 
-    function show() {
+    function show()
+    {
         $id = $_GET["id"];
         $productRepository = new ProductRepository();
         $product = $productRepository->find($id);
@@ -104,8 +106,15 @@ class ProductController {
 
         require "view/product/show.php";
     }
-
-    function storeComment() {
+    function ajaxSearch()
+    {
+        $pattern = $_GET["pattern"];
+        $productRepository = new ProductRepository();
+        $products = $productRepository->getByPattern($pattern);
+        require "view/product/ajaxSearch.php";
+    }
+    function storeComment()
+    {
         $data = [
             "email" => $_POST["email"],
             "fullname" => $_POST["fullname"],
@@ -114,15 +123,17 @@ class ProductController {
             "description" => $_POST["description"],
             "product_id" =>  $_POST["product_id"],
         ];
+
+        // Lưu đánh giá vào cơ sở dữ liệu
         $commentRepository = new CommentRepository();
         $commentRepository->save($data);
 
-        //Lấy lại danh sách comment bao gồm cả comment mới lưu vào database
+        // Lấy lại danh sách đánh giá mới
         $productRepository = new ProductRepository();
         $product = $productRepository->find($_POST["product_id"]);
-        // $comments = $product->getComments();
+        $comments = $product->getComments(); // Lấy danh sách đánh giá mới
+
+        // Hiển thị danh sách đánh giá
         require "layout/comments.php";
-        
     }
 }
-?>
