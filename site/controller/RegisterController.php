@@ -16,8 +16,7 @@ class RegisterController {
         // }
         
         $customerRepository = new CustomerRepository();
-        $currentDateTime = date("Y:m:d H:i:s");
-        print "Hello";
+        $currentDateTime = date("Y-m-d H:i:s");
         $data = [
             "role_id" => 4,
             "name" => $_POST["fullname"],
@@ -53,6 +52,10 @@ class RegisterController {
         // else {
         //     $_SESSION["error"] = $customerRepository->getError();
         }
+        // else{
+        //     $_SESSION["success"] = "Lỗi không vào database";
+        //     $_SESSION["success"] = $data["role_id"] . $data["name"] . $data["mobile"] . $data["email"] . $data["password"] . $data["updated_at"] . $data["created_at"] . $data["is_active"] . $data["address"] . $data["ward_id"];
+        // }
         header("location:index.php");
     }
 
