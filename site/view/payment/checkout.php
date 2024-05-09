@@ -19,7 +19,7 @@
                 ?>
                 <div class="row">
                     <div class="col-xs-2">
-                        <img class="img-responsive" src="../upload/<?=$item["img"]?>"
+                        <img class="img-responsive" src="../assets/img/<?=$item["img"]?>"
                             alt="<?=$item["name"]?>">
                     </div>
                     <div class="col-xs-7">

@@ -27,7 +27,7 @@
                         ?>
                         <div class="row">
                             <div class="col-xs-2">
-                                <img class="img-responsive" src="../upload/<?=$product->getFeaturedImage()?>"
+                                <img class="img-responsive" src="../assets/img/<?=$product->getFeaturedImage()?>"
                                     alt="<?=$product->getName()?>">
                             </div>
                             <div class="col-xs-7">

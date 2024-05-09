@@ -276,6 +276,7 @@ $(function(){
                 });
             }
         });
+        
     });
 
     // Ajax search

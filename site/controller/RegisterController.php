@@ -16,17 +16,19 @@ class RegisterController {
         // }
         
         $customerRepository = new CustomerRepository();
+        $currentDateTime = date("Y:m:d H:i:s");
+        print "Hello";
         $data = [
+            "role_id" => 4,
             "name" => $_POST["fullname"],
-            "password" => $_POST["password"],   
             "mobile" => $_POST["mobile"],
             "email" => $_POST["email"],
-            "login_by" => "form",
+            "password" => $_POST["password"],
+            "updated_at" => $currentDateTime,
+            "created_at" => $currentDateTime,
             "is_active" => 1,
-            "shipping_name" => "",
-            "shipping_mobile" => "",
+            "address" => "",
             "ward_id" => null,
-            "housenumber_street" => "",
         ];
         if ($customerRepository->save($data)) {
             $_SESSION["success"] = "Đã tạo tài khoản thành công";
