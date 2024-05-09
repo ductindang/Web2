@@ -101,7 +101,7 @@ require_once('../../database/dbhelper.php');
           $shipping_fee = $_POST['shipping_fee'];
           $discount_percent = $_POST['discount_percent'];
           $category_id = $_POST['category_id'];
-          $query = "INSERT into supplier(name,address,shipping_fee,discount,category_id) value('$name_supplier','$address_supplier','$shipping_fee','$discount_percent','$category_id')";
+          $query = "INSERT into supplier(name,address,shipping_fee,discount,category_id,display) value('$name_supplier','$address_supplier','$shipping_fee','$discount_percent','$category_id',0)";
           $result = Database::getInstance()->execute($query);
           $query0 = "SELECT * from supplier order by id desc";
           $result1 = Database::getInstance()->execute($query0);

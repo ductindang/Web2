@@ -41,6 +41,39 @@
             return $customer;
         }
 
+        function save($data) {
+            global $conn;
+            $role_id = $data["role_id"];
+            $name = $data["name"];
+            $mobile = $data["mobile"];
+            $email = $data["email"];
+            $password = $data["password"];
+            $updated_at = $data["updated_at"];
+            $created_at = $data["created_at"];
+            $is_active = $data["is_active"];
+            $address = $data["address"];
+            $ward_id = $data["ward_id"];
+            if (empty($ward_id)) {
+                $ward_id = "NULL";
+            }
+    
+            if (empty($is_active)) {
+                $is_active = 0;
+            }
+    
+            $sql = "INSERT INTO user (role_id, name, mobile, email, password, updated_at, created_at, is_active, address, ward_id) 
+            VALUES ('$role_id','$name', '$mobile', '$email', '$password',  '$updated_at','$created_at', $is_active, '$address' ,$ward_id )";
+            
+
+            $_SESSION["success"] = $sql;
+            if ($conn->query($sql) === TRUE) {
+                $last_id = $conn->insert_id;//chỉ cho auto increment
+                return $last_id;
+            } 
+            $this->error =  "Error: " . $sql . PHP_EOL . $conn->error;
+            return false;
+        }
+
         function update($customer){
             global $conn;
             $id = $customer->getId();
@@ -71,6 +104,8 @@
                 SET role_id=$role_id, name='$name', mobile='$mobile', email='$email',
                     password='$password', updated_at='$updated_at', created_at='$created_at',
                     is_active=$is_active, address='$address', ward_id=$ward_id Where id=$id";
+
+            
 
             if ($conn->query($sql) === TRUE){
                 return true;

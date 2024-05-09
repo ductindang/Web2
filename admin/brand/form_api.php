@@ -13,15 +13,15 @@ if(!empty($_POST)) {
 
     switch ($action) {
         case 'delete':
-            deleteCategory();
+            deleteBrand();
             break;
     }
 }
 
-function deleteCategory() {
+function deleteBrand() {
     $id = getPost('id');
     $updated_at = date("Y-m-d H:i:s");
-    $sql = "UPDATE category SET deleted = 1 WHERE id = $id";
+    $sql = "UPDATE brand SET deleted = 1,  WHERE id = $id";
     execute($sql);
 }
 ?>

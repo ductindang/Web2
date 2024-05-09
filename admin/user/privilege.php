@@ -1,4 +1,4 @@
-<link rel="stylesheet"type="text/css" href="../../assets/css/index.css">
+<link rel="stylesheet"type="text/css" href="../../assets/css/dashboard.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <?php
 	$name = 'Thêm/Sửa Sản Phẩm';

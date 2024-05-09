@@ -29,11 +29,20 @@
 
 	<!-- Latest compiled JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+	<style>
+		body{
+			background-image: url(https://giphy.com/gifs/sky-clouds-beauty-Pp9W9tuVF5NwQ);
+        background-size: cover; /* để hình ảnh tự động điều chỉnh kích thước để phù hợp với kích thước của phần tử */
+        /* Các thuộc tính khác tùy chỉnh */
+        background-repeat: no-repeat;
+		}
+	</style>
 </head>
 <body>
 	
 
-<section class="h-80 gradient-form gra-bgcolor" >
+<section class=" " style=" background-size: cover;background-repeat: no-repeat;background-image: url(https://64.media.tumblr.com/d2dc6c08e7cdd2f56202f86996bbb977/tumblr_o2x9qnZ04n1tchrkco1_500.gif);" >
   <div class="container py-5 h-80">
     <div class="row d-flex justify-content-center align-items-center h-80">
       <div class="col-xl-13" >

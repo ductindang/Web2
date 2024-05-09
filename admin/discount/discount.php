@@ -70,7 +70,7 @@ class Discount extends App
           $percentcode = $_POST['percent_code'];
           $firstday = $_POST['start_day'];
           $finishday = $_POST['end_day'];
-          $query = "INSERT into discount(name,discount_percentage,start_day,finish_date) value('$name','$percentcode','$firstday','$finishday')";
+          $query = "INSERT into discount(name,discount_percentage,start_day,finish_date,display) value('$name','$percentcode','$firstday','$finishday',0)";
 
           $result = Database::getInstance()->execute($query);
      }

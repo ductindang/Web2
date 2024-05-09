@@ -75,7 +75,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         <h3 class="modal-title text-center">Đăng ký</h3>
                     </div>
-                    <form class="form-register" action="index.php?c=register&a=create" method="POST" role="form">
+                    <!-- <form class="form-register" action="index.php?c=register&a=create" method="POST" role="form">
                         <div class="modal-body">
                             <div class="form-group">
                                 <input type="text" class="form-control" name="fullname"  placeholder="Họ và tên" >
@@ -92,8 +92,6 @@
                             <div class="form-group">
                                 <input type="password" class="form-control" name="password_confirmation" placeholder="Nhập lại mật khẩu" autocomplete="off" autosave="off">
                             </div>
-                            <!-- <div class="form-group g-recaptcha" data-sitekey="<??>">=GOOGLE_RECAPTCHA_SITE</div> -->
-                            <!-- dummy input -->
 					        <input type="text" name="hiddenRecaptcha" style="opacity: 0; position: absolute; top: 0; left: 0; height: 1px; width: 1px;">
                             <input type="hidden" name="reference" value="">
 
@@ -101,6 +99,31 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
                             <button type="submit" class="btn btn-primary">Đăng ký</button>
+                        </div>
+                    </form> -->
+
+                    <form action="index.php?c=register&a=create" method="POST" role="form">
+                        <div class="modal-body">
+                        <div class="form-group">
+                                <input type="text" class="form-control" name="fullname"  placeholder="Họ và tên" >
+                                </div>
+                                <div class="form-group">
+                                    <input type="tel" class="form-control" name="mobile" placeholder="Số điện thoại"  >
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control" name="email" placeholder="Email" >
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control" name="password" placeholder="Mật khẩu">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control" name="password_confirmation" placeholder="Nhập lại mật khẩu" autocomplete="off" autosave="off">
+                                </div>
+                            <input type="hidden" name="reference" value="">                          
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Đăng ký</button><br>
                         </div>
                     </form>
                 </div>

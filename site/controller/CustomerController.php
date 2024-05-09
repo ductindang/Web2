@@ -13,16 +13,20 @@ class CustomerController {
 		$customer->setName($_POST["fullname"]);
 		$customer->setMobile($_POST["mobile"]);
 		$currentPassword = $_POST["current_password"];
+
 		$dbPassword = $customer->getPassword();
 		$newPassword = $_POST["password"];
+		$verifyPassword = $_POST["re-password"];
+		
 		if ($currentPassword && $newPassword) {
-			//verify
-			// if (password_verify($currentPassword, $dbPassword)) {
-			// 	$encodePassword = password_hash($newPassword, PASSWORD_BCRYPT);
-			// 	$customer->setPassword($encodePassword);
-			// }
 			if($currentPassword == $dbPassword){
-				$customer ->setPassword($newPassword);
+				if($newPassword === $verifyPassword){
+					$customer ->setPassword($newPassword);
+				}else{
+					$_SESSION["error"] = "Mật khẩu mới và xác nhận mật khẩu không giống nhau.";
+					header("location: index.php?c=customer&a=info");
+					exit;
+				}
 			}
 			else {
 				$_SESSION["error"] = "Mật khẩu hiện tại không đúng.";

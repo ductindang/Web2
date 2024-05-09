@@ -1,31 +1,36 @@
-
 <?php
+$title = 'Quản Lý Đơn Hàng';
+$baseUrl = '../';
+require_once('../layouts/header.php');
 
-	$title = 'Quản Lý Đơn Hàng';
-	$baseUrl = '../';
-	require_once('../layouts/header.php');
-	
+// Khởi tạo biến $sql
+$sql = "";
 
-	
-	$start_date = isset($_GET['start_date']) ? $_GET['start_date'] : '';
-	$end_date = isset($_GET['end_date']) ? $_GET['end_date'] : '';
-	
-	// Kiểm tra xem ngày bắt đầu và kết thúc có được cung cấp không
-	if ($start_date !== '' && $end_date !== '') {
-		// Tạo câu truy vấn SQL để lấy các đơn hàng trong khoảng ngày đã chọn
-		$sql = "SELECT * FROM `order` WHERE created_date BETWEEN '$start_date' AND '$end_date'";
-	} else {
-		// Nếu không có ngày bắt đầu và kết thúc, lấy tất cả các đơn hàng
-		$sql = "SELECT * FROM `order`";
-	}
+$start_date = isset($_GET['start_date']) ? $_GET['start_date'] : '';
+$end_date = isset($_GET['end_date']) ? $_GET['end_date'] : '';
+$search_customer = isset($_GET['search_customer']) ? $_GET['search_customer'] : '';
 
-    $data = executeResult($sql);
-	
+// Kiểm tra và xử lý yêu cầu tìm kiếm khách hàng
+if ($search_customer !== '') {
+    $sql = "SELECT * FROM `order` WHERE cus_fullname LIKE '%$search_customer%' OR cus_mobile LIKE '%$search_customer%' OR cus_address LIKE '%$search_customer%'";
+} else {
+    // Nếu không có yêu cầu tìm kiếm, gán giá trị mặc định cho $sql
+    $sql = "SELECT * FROM `order`";
+}
+
+// Kiểm tra và xử lý lọc theo ngày
+if ($start_date !== '' && $end_date !== '') {
+    // Thêm điều kiện vào câu truy vấn SQL để lọc đơn hàng theo ngày
+    $sql .= " WHERE created_date BETWEEN '$start_date' AND '$end_date'";
+}
+
+$data = executeResult($sql);
 ?>
 	
 	<div class="row" style="margin-top: 20px;">
     <div class="col-md-12 table-responsive">
-        <h3>Quản Lý Đơn Hàng</h3>
+        <h1 class=" badge-pill badge-primary" style="display:flex;justify-content: center;padding: 10px;">Quản Lý Đơn Hàng</h1>
+		
         <div class="row">
             <div class="col-md-3">
                 <label for="start_date">Từ ngày:</label>
@@ -40,10 +45,13 @@
             </div>
         </div>
     </div>
+	<div class="form-group col-md-12 mt-4">
+    <input type="text" id="search_customer" class="form-control" placeholder="Nhập tên khách hàng...">
+    <button onclick="searchOrder()" class="btn btn-primary mt-3">Tìm kiếm</button>
+</div>
 
-
-		<table class="table table-bordered table-hover" style="margin-top: 20px;">
-		<thead>
+		<table class="table table-bordered table-hover table-striped" style="margin-top: 20px;">
+		<thead class="thead-light">
 				<tr>
 					<th style=" padding: 10px;font-size: 16px;">STT
 						
@@ -69,9 +77,7 @@
 					<button onclick="sortTable(5, true)" class="btn btn-primary btn-sm">▲</button>
     <button onclick="sortTable(5, false)" class="btn btn-primary btn-sm">▼</button>
 					</th>
-					<th style="width: 120px"> Trạng thái
-					<button onclick="sortTable(6, true)" class="btn btn-primary btn-sm">▲</button>
-    <button onclick="sortTable(6, false)" class="btn btn-primary btn-sm">▼</button></th>
+
 				</tr>
 			</thead>
 			<tbody>
@@ -84,22 +90,14 @@
 					<td><a href="detail.php?id='.$item['id'].'">'.$item['cus_mobile'].'</a></td>					
 					<td>'.$item['cus_address'].'</td>
 					<td>'.$item['created_date'].'</td>
-					<td style="width: 50px">';
+					<td style="width: 50px " >';
 					
 					if ($item['payment_method'] == 0) {
-						echo 'COD';
+						echo  '<span class=" badge-pill badge-success">COD</span>'; 
 					} elseif ($item['payment_method'] == 1) {
-						echo 'Bank';
+						echo '<span class="badge-pill badge-info">BANK</span>';
 					}
-					echo '<td>';
-		if($item['status'] == 0) {
-			echo '<button onclick="changeStatus('.$item['id'].', 1)" class="btn btn-sm btn-success" style="margin-bottom: 10px;">Approve</button>
-			<button onclick="changeStatus('.$item['id'].', 2)" class="btn btn-sm btn-danger">Cancel</button>';
-		} else if($item['status'] == 1) {
-			echo '<label class="badge badge-success">Approved</label>';
-		} else {
-			echo '<label class="badge badge-danger">Cancel</label>';
-		}
+					
 		echo '</td>
 				</tr>';
 	}
@@ -122,20 +120,19 @@
         // Chuyển hướng đến URL mới
         window.location.href = url;
     }
+	function searchOrder() {
+        // Lấy giá trị từ trường nhập liệu tìm kiếm
+        var searchKeyword = document.getElementById('search_customer').value.trim();
 
-    function changeStatus(id, status) {
-        $.post('form_api.php', {
-            'id': id,
-            'status': status,
-            'action': 'update_status'
-        }, function(data) {
-            if (data != null && data != '') {
-                //alert(data);
-                return;
-            }
-            location.reload();
-        })
+        // Tạo URL mới với tham số search_customer
+        var url = window.location.pathname + '?';
+        if (searchKeyword !== '') {
+            url += 'search_customer=' + encodeURIComponent(searchKeyword);
+        }
+        // Chuyển hướng đến URL mới
+        window.location.href = url;
     }
+
 </script>
 <script type="text/javascript">
 	function changeStatus(id, status ) {

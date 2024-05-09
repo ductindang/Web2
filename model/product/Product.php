@@ -116,6 +116,12 @@ class Product
 
     function getDiscountPercentage()
     {
+        $discountRepository = new DiscountRepository();
+        $discount = $discountRepository->find($this->discount_id);
+        // if($discount){
+        //     return $discount.getDiscountPercentage();
+        // }
+
         return 10;
     }
 

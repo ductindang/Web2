@@ -7,6 +7,9 @@ require_once('../../utils/App.php');
 require_once('../../database/dbhelper.php');
 ?>
 <div>
+    <div>
+        <h3>Thống kê</h3>
+    </div>
     <div class="d-flex mb-5">
         <div class="col-md-3">
             <label for="">Ngày bắt đầu</label>
@@ -15,6 +18,12 @@ require_once('../../database/dbhelper.php');
         <div class="col-md-3">
             <label for="">Ngày kết thúc</label>
             <input type="date" class="form-control w-50" id="e-day">
+        </div>
+        <div class="col-md-3">
+            <label for="">Danh mục sản phẩm</label>
+            <select name="" id="select-category" class="form-control w-50">
+                <option value="-1">Chọn danh mục</option>
+            </select>
         </div>
         <div class="col-md-2">
             <button class="btn btn-primary mt-5" id="statistics">Thống kê</button>

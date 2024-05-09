@@ -15,48 +15,22 @@
 ?>
 
 <div class="row" style="margin-top: 20px;">
-	<div class="col-md-12">
-		<h3>Chi Tiết Đơn Hàng</h3>
-	</div>
-	<div class="col-md-8 table-responsive">
-		<table class="table table-bordered table-hover" style="margin-top: 20px;">
-			<thead>
-				<tr>
-					<th>STT</th>
-					<th>Thumbnail</th>
-					<th>Tên Sản Phẩm</th>
-					<th>Giá</th>
-					<th>Số Lượng</th>
-					<th>Tổng Giá</th>
-				</tr>
-			</thead>
-			<tbody>
-<?php
-	$index = 0;
-	foreach($data as $item) {
-		echo '<tr>
-					<th>'.(++$index).'</th>
-					<td><img src="'.fixUrl($item['featured_image']).'" style="height: 120px"/></td>
-					<td>'.$item['name'].'</td>
-					<td>'.$item['unit_price'].'</td>
-					<td>'.$item['qty'].'</td>
-					<td>'.$item['total_price'].'</td>
-				</tr>';
-	}
-?>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<th>Tổng Tiền</th>
-					<th><?php echo isset($orderItem[0]['total_price']) ? $orderItem[0]['total_price'] : ''; ?></th>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-	<div class="col-md-4">
-		<table class="table table-bordered table-hover" style="margin-top: 20px;">
+	
+<div class="col-md-5 border border-primary rounded">
+    <form id="statusForm">
+        <label for="status">Trạng Thái Đơn Hàng:</label>
+        <select id="status" class="form-control" onchange="changeOrderStatus(<?php echo $orderId; ?>, this.value)">
+            <option value="1" <?php echo $orderItem[0]['status'] == 0 ? 'selected' : ''; ?>>Đã đặt hàng</option>
+            <option value="2" <?php echo $orderItem[0]['status'] == 1 ? 'selected' : ''; ?>>Đã xác nhận đơn hàng</option>
+            <option value="3" <?php echo $orderItem[0]['status'] == 2 ? 'selected' : ''; ?>>Hoàn tất đóng gói</option>
+            <option value="4" <?php echo $orderItem[0]['status'] == 3 ? 'selected' : ''; ?>>Đang giao hàng</option>
+			<option value="5" <?php echo $orderItem[0]['status'] == 3 ? 'selected' : ''; ?>>Đã giao hàng</option>
+			<option value="6" <?php echo $orderItem[0]['status'] == 3 ? 'selected' : ''; ?>>Đơn hàng bị hủy</option>
+        </select>
+    </form>
+</div>
+	<div class="col-md-6  border border-primary rounded  text-secondary "  style="margin-left: 22px;">
+		<table class="table table-bordered table-hover" style="margin-top: 20px;" style="margin-top: 20px;">
 			<tr>
 				<th>Họ & Tên: </th>
 				<td><?php echo isset($orderItem[0]['cus_fullname']) ? $orderItem[0]['cus_fullname'] : ''; ?></td>
@@ -72,7 +46,64 @@
 			</tr>
 		</table>
 	</div>
+	<div class="col-md-12">
+		<h3>Chi Tiết Đơn Hàng</h3>
+	</div>
+	<div class="col-md-8 table-responsive">
+		<table class="table table-bordered table-hover" style="margin-top: 20px;">
+			<thead class="thead-light">
+				<tr>
+					<th>STT</th>
+				
+					<th>Tên Sản Phẩm</th>
+					<th>Giá</th>
+					<th>Số Lượng</th>
+					<th>Tổng Giá</th>
+				</tr>
+			</thead>
+			<tbody>
+<?php
+	$index = 0;
+	foreach($data as $item) {
+		echo '<tr>
+					<th>'.(++$index).'</th>
+				
+					<td>'.$item['name'].'</td>
+					<td>'.$item['unit_price'].'</td>
+					<td>'.$item['qty'].'</td>
+					<td>'.$item['total_price'].'</td>
+				</tr>';
+			
+			}
+?>
+				<tr>
+					<td></td>
+					
+					<td></td>
+					<td></td>
+					<th>Tổng Tiền</th>
+					<th><?php echo isset($orderItem[0]['total_money']) ? $orderItem[0]['total_money'] : ''; ?></th>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>
+<script type="text/javascript">
+    function changeOrderStatus(orderId, status) {
+        // Gửi yêu cầu cập nhật trạng thái của đơn hàng
+        $.post('form_api.php', {
+            'id': orderId,
+            'status': status,
+            'action': 'update_status'
+        }, function(data) {
+            if (data != null && data != '') {
+                // Xử lý phản hồi từ máy chủ nếu cần
+            }
+            // Tải lại trang để cập nhật dữ liệu
+            location.reload();
+        });
+    }
+</script>
 <?php
 	require_once('../layouts/footer.php');
 ?>

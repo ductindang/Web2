@@ -2,6 +2,9 @@
 $title = 'Quản Lý Nhà Cung Cấp';
 $baseUrl = '../';
 require_once('../layouts/header.php');
+
+	
+
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-3">

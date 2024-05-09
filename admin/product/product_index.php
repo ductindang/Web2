@@ -1,4 +1,4 @@
-
+<link rel="stylesheet"type="text/css" href="../../assets/css/dashboard.css">
 <?php
 
 
@@ -7,7 +7,10 @@
 	require_once('../layouts/header.php');
 	require_once($baseUrl.'../utils/utility.php');
     require_once($baseUrl.'../database/dbhelper.php');
-	
+	// Xử lý yêu cầu tìm kiếm
+
+
+
 	
 
 
@@ -16,6 +19,13 @@
 	LEFT JOIN Category ON Product.category_id = Category.id 
 	LEFT JOIN Brand ON Product.brand_id = Brand.id 
 	WHERE Product.deleted = 0";
+
+$search_keyword = isset($_GET['search_keyword']) ? $_GET['search_keyword'] : '';
+
+// Thêm điều kiện vào câu truy vấn SQL để tìm kiếm sản phẩm theo từ khóa
+if ($search_keyword !== '') {
+    $sql .= " AND (Product.name LIKE '%$search_keyword%' OR Brand.name LIKE '%$search_keyword%' OR Category.name LIKE '%$search_keyword%')";
+}
 
 // Xử lý lọc theo ngày
 $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : '';
@@ -47,24 +57,26 @@ $data = executeResult($sql);
         // Chuyển hướng đến URL mới
         window.location.href = url;
     }
+    function searchProduct() {
+    var searchKeyword = document.getElementById('search_keyword').value.trim();
+
+    // Tạo URL mới với tham số search_keyword
+    var url = window.location.pathname + '?';
+    if (searchKeyword !== '') {
+        url += 'search_keyword=' + encodeURIComponent(searchKeyword);
+    }
+    // Chuyển hướng đến URL mới
+    window.location.href = url;
+}
 </script>
 
-<div class="row" style="margin-top: 20px;">
-	<div class="col-md-12 table-responsive">
-		<h>Quản Lý Đơn Hàng</h	3>
-	
-		<div class="row">
-    <div class="col-md-3">
-        <label for="start_date">Từ ngày:</label>
-        <input type="date" class="form-control" id="start_date" name="start_date">
-    </div>
-    <div class="col-md-3">
-        <label for="end_date">Đến ngày:</label>
-        <input type="date" class="form-control" id="end_date" name="end_date">
-    </div>
-    <div class="col-md-2">
-        <button onclick="applyFilter()" class="btn btn-primary" style="margin-top: 30px;">Lọc</button>
-    </div>
+<div class="row " style="margin-top: 20px;">
+	<div class="col-md-12 table-responsive ">
+    <h1 class=" badge-pill badge-primary" style="display:flex;justify-content: center;padding: 10px;">Quản Lý Sản Phẩm</h1>
+		
+	<div class="form-group">
+    <input type="text" id="search_keyword" class="form-control" placeholder="Nhập từ khóa tìm kiếm...">
+    <button onclick="searchProduct()" class="btn btn-primary mt-3">Tìm kiếm</button>
 </div>
    
    
@@ -74,52 +86,64 @@ $data = executeResult($sql);
 	
 <?php } ?>	
 
-		<table class="table table-bordered table-hover" style="margin-top: 20px;">
-			<thead>
+		<table class="table table-bordered table-hover table-striped" style="margin-top: 20px;">
+			<thead class="thead-light">
 				<tr>
-					<th>STT</th>
-					<th>Thumbnail</th>
-					<th style=" padding: 10px;font-size: 16px;">
-            Tên Sản Phẩm
+                <th>STT</th>
+    <th>Thumbnail</th>
+    <th style="padding: 5px 5px;">
+        <div style="display: flex; align-items: center;">
+            <span style="margin-right: auto;">Tên Sản Phẩm</span>
             <!-- Thêm nút lên và nút xuống cho cột Tên Sản Phẩm -->
             <button onclick="sortTable(2, true)" class="btn btn-primary btn-sm">▲</button>
-    <button onclick="sortTable(2, false)" class="btn btn-primary btn-sm">▼</button>
-        </th>
-					<th style=" padding: 10px 20px;font-size: 16px;">
-					Nhãn hiệu
-						<!-- Thêm nút lên và nút xuống cho cột Tên Sản Phẩm -->
-						<button onclick="sortTable(3, true)" class="btn btn-primary btn-sm">▲</button>
-    <button onclick="sortTable(3, false)" class="btn btn-primary btn-sm">▼</button>
-					</th>
-					<th style=" padding: 10px;font-size: 16px;">
-					Số lượng tồn
-					<!-- Thêm nút lên và nút xuống cho cột Tên Sản Phẩm -->
-					<button onclick="sortTable(4, true)" class="btn btn-primary btn-sm">▲</button>
-    <button onclick="sortTable(4, false)" class="btn btn-primary btn-sm">▼</button>
-
-					</th>
-					<th style=" padding: 10px 60px;font-size: 16px;">
-					Mô tả
-						<!-- Thêm nút lên và nút xuống cho cột Tên Sản Phẩm -->
-						<button onclick="sortTable(5, true)" class="btn btn-primary btn-sm" >▲</button>
-    <button onclick="sortTable(5, false)" class="btn btn-primary btn-sm">▼</button>
-
-					</th>
-					<th style=" padding: 10px 20px;font-size: 16px;">Giá nhập
-						<!-- Thêm nút lên và nút xuống cho cột Tên Sản Phẩm -->
-						<button onclick="sortTable(6, true)" class="btn btn-primary btn-sm">▲</button>
-    <button onclick="sortTable(6, false)" class="btn btn-primary btn-sm">▼</button>
-					</th>
+            <button onclick="sortTable(2, false)" class="btn btn-primary btn-sm">▼</button>
+        </div>
+    </th>
+    <th style="padding: 5px 5px;">
+    <div style="display: flex; align-items: center;">
+        <span style="margin-right: auto;">Nhãn hiệu</span>
+        <!-- Thêm nút lên và nút xuống cho cột Nhãn hiệu -->
+        <span><button onclick="sortTable(3, true)" class="btn btn-primary btn-sm">▲</button></span>
+        <button onclick="sortTable(3, false)" class="btn btn-primary btn-sm">▼</button>
+    </div>
+</th>
+					<th style="padding: 5px 5px;">
+    <div style="display: flex; align-items: center;">
+        <span style="margin-right: auto;">Số lượng tồn</span>
+        <!-- Thêm nút lên và nút xuống cho cột Số lượng tồn -->
+        <button onclick="sortTable(4, true)" class="btn btn-primary btn-sm">▲</button>
+        <button onclick="sortTable(4, false)" class="btn btn-primary btn-sm">▼</button>
+    </div>
+</th>
+<th style="padding: 10px 20px; ">
+    <div style="display: flex; align-items: center;">
+        <span style="margin-right: auto;">Mô tả</span>
+        <!-- Thêm nút lên và nút xuống cho cột Mô tả -->
+        <button onclick="sortTable(5, true)" class="btn btn-primary btn-sm">▲</button>
+        <button onclick="sortTable(5, false)" class="btn btn-primary btn-sm">▼</button>
+    </div>
+</th>
+<th style="padding: 10px 20px; font-size: 16px;">
+    <div style="display: flex; align-items: center;">
+        <span style="margin-right: auto;">Giá nhập</span>
+        <!-- Thêm nút lên và nút xuống cho cột Giá nhập -->
+        <button onclick="sortTable(6, true)" class="btn btn-primary btn-sm">▲</button>
+        <button onclick="sortTable(6, false)" class="btn btn-primary btn-sm">▼</button>
+    </div>
+</th>
 					<th style=" padding: 10px 20px;font-size: 16px;">Giá bán
 						<!-- Thêm nút lên và nút xuống cho cột Tên Sản Phẩm -->
 						<button onclick="sortTable(7, true)" class="btn btn-primary btn-sm">▲</button>
     <button onclick="sortTable(7, false)" class="btn btn-primary btn-sm">▼</button>
 					</th>
-					<th style=" padding: 10px 20px;font-size: 16px;">Danh Mục
-						<!-- Thêm nút lên và nút xuống cho cột Tên Sản Phẩm -->
-						<button onclick="sortTable(8, true)" class="btn btn-primary btn-sm">▲</button>
-    <button onclick="sortTable(8, false)" class="btn btn-primary btn-sm">▼</button>
-					</th >
+					<th style="padding: 10px 20px; font-size: 16px;">
+    <div style="display: flex; align-items: center;">
+        <span style="margin-right: auto;">Danh Mục</span>
+        <!-- Thêm nút lên và nút xuống cho cột Danh Mục -->
+        <button onclick="sortTable(8, true)" class="btn btn-primary btn-sm">▲</button>
+        <button onclick="sortTable(8, false)" class="btn btn-primary btn-sm">▼</button>
+    </div>
+</th>
 					<th style="width: 50px"></th>
 					<th style="width: 50px"></th>
 				</tr>
@@ -164,17 +188,26 @@ foreach($data as $item) {
 
 <script type="text/javascript">
 	function deleteProduct(id) {
-		option = confirm('Bạn có chắc chắn muốn xoá sản phẩm này không?')
-		if(!option) return;
-
-		$.post('form_api.php', {
-			'id': id,
-			'action': 'delete'
-		}, function(data) {
-			location.reload()
-		})
-		
-	}
+    Swal.fire({
+        title: 'Bạn chắc chắn muốn xoá sản phẩm này?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Xoá',
+        cancelButtonText: 'Hủy'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Nếu người dùng nhấn vào nút Xoá, thực hiện xoá sản phẩm
+            $.post('form_api.php', {
+                'id': id,
+                'action': 'delete'
+            }, function(data) {
+                location.reload();
+            });
+        }
+    });
+}
 	
 </script>
 <script type="text/javascript">

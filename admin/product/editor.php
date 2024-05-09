@@ -57,7 +57,7 @@
 					</div>
 					<div class="col-md-3 col-12" style="border: solid grey 1px; padding-top: 10px; padding-bottom: 10px;">
 						<div class="form-group">
-						  <label for="featured_image">Hình ảnh sản phẩm:</label>
+						  <label for="featured_image">featured_image:</label>
 						  <input type="file" class="form-control" id="featured_image" name="featured_image" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
 						  <img id="thumbnail_img" src="<?=($featured_image)?>" style="max-height: 160px; margin-top: 5px; margin-bottom: 15px;">
 						</div>
@@ -94,7 +94,7 @@
 						</div>
 						<div class="form-group">
 						  <label for="enter_price">Giá nhập:</label>
-						  <input required="true" type="text" class="form-control" id="enter_price" name="enter_price" value="<?=$enter_price?>">
+						  <input required="true" type="number" class="form-control" id="enter_price" name="enter_price" value="<?=$enter_price?>">
 						</div>
 						<div class="form-group">
 						  <label for="price">Giá:</label>

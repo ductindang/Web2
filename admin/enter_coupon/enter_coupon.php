@@ -6,6 +6,8 @@ require_once('../../database/Database.php');
 require_once('../../utils/App.php');
 require_once('../../database/dbhelper.php');
 
+
+
 class Enter_coupon extends App
 {
      function __construct()
@@ -16,12 +18,12 @@ class Enter_coupon extends App
      public function getList()
      {
           $out_put = "";
-          $query = "SELECT * from enter_coupon where display=0 order by id desc";
+          $query = "SELECT * from enter_coupon where display = 0 order by id desc";
           $sql_select = Database::getInstance()->execute($query);
           $out_put .= "
     <div>
-    <table width=100% class='table table-striped table-hover table-discount'>
-        <tr>
+    <table width=100% class='table table-striped table-hover table-discount '>
+        <tr class='thead-light'>
             <td class='font-weight-bold'>STT</td>
             <td class='font-weight-bold'>Nhà cung cấp</td>
             <td class='font-weight-bold'>Nhân viên</td>

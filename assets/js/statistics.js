@@ -50,6 +50,10 @@ function chart() {
                     },
                     options: {
                          legend: { display: false },
+                         title: {
+                              display: true,
+                              text: "Thống kê theo thời gian"
+                         },
                     }
                });
           }
@@ -75,53 +79,130 @@ function listProSold(start_day, end_day) {
           }
      })
 }
+function listProSoldCate(start_day, end_day, selectCategory) {
+     $.ajax({
+          url: "statistics.php/listProSoldCate",
+          method: "POST",
+          data: { start_day: start_day, end_day: end_day, selectCategory: selectCategory },
+          success: function (response) {
+               $('#listProSold').append(response);
+          }
+     })
+}
+function categoryInSelect() {
+     let pull_select = 1;
+     $('#select-category').html(``);
+     $('#select-category').html(`<option value="-1">Chọn danh mục</option>`);
+     $.ajax({
+          url: "../supplier/supplier.php/displayCategoryInSelect",
+          method: "POST",
+          data: { pull_select: pull_select },
+          success: function (data) {
+               data.map((data, index_display) => {
+                    $('#select-category').append(`<option value=${data.id} id="category-id"> ${data.name}</option>`);
+               })
+          }
+     })
+};
 $(document).ready(function () {
+     categoryInSelect();
      chart();
      $('#statistics').click(function () {
+          let selectCategory = $('#select-category').val();
           let start_day = $('#s-day').val();
           let end_day = $('#e-day').val();
-          totalSum(start_day, end_day);
-          $('#listProSold').html(``);
-          listProSold(start_day, end_day);
-          console.log(start_day);
-          $.ajax({
-               url: "statistics.php/displayChart",
-               method: "POST",
-               data: { start_day: start_day, end_day: end_day },
-               success: function (response) {
-                    let indexX = 0;
-                    let xValues = [];
-                    let yValues = [];
-                    let indexobj = 0;
-                    let obj = [];
-                    for (var key in response) {
-                         obj[indexobj] = response[key];
-                         indexobj++;
-                    }
-                    for (var index in obj) {
-                         xValues[indexX] = obj[index]['created_date'];
-                         yValues[indexX] = obj[index]['total_money'];
-                         indexX++;
-                    }
-                    console.log(xValues);
-                    new Chart("myChart", {
-                         type: "line",
-                         data: {
-                              labels: xValues,
-                              datasets: [{
-                                   fill: false,
-                                   lineTension: 0,
-                                   backgroundColor: "rgba(0,0,255,1.0)",
-                                   borderColor: "rgba(0,0,255,0.1)",
-                                   data: yValues
-                              }]
-                         },
-                         options: {
-                              legend: { display: false },
+          if (selectCategory == -1) {
+               totalSum(start_day, end_day);
+               $('#listProSold').html(``);
+               listProSold(start_day, end_day);
+               $.ajax({
+                    url: "statistics.php/displayChart",
+                    method: "POST",
+                    data: { start_day: start_day, end_day: end_day },
+                    success: function (response) {
+                         let indexX = 0;
+                         let xValues = [];
+                         let yValues = [];
+                         let indexobj = 0;
+                         let obj = [];
+                         for (var key in response) {
+                              obj[indexobj] = response[key];
+                              indexobj++;
                          }
-                    });
-               }
-          });
+                         for (var index in obj) {
+                              xValues[indexX] = obj[index]['created_date'];
+                              yValues[indexX] = obj[index]['total_money'];
+                              indexX++;
+                         }
+                         console.log(xValues);
+                         new Chart("myChart", {
+                              type: "line",
+                              data: {
+                                   labels: xValues,
+                                   datasets: [{
+                                        fill: false,
+                                        lineTension: 0,
+                                        backgroundColor: "rgba(0,0,255,1.0)",
+                                        borderColor: "rgba(0,0,255,0.1)",
+                                        data: yValues
+                                   }]
+                              },
+                              options: {
+                                   legend: { display: false },
+                                   title: {
+                                        display: true,
+                                        text: "Thống kê theo thời gian"
+                                   },
+                              }
+                         });
+                    }
+               });
+          } else {
+               let totalSum = 0;
+               $.ajax({
+                    url: "statistics.php/displayChartCate",
+                    method: "POST",
+                    data: { start_day: start_day, end_day: end_day, selectCategory: selectCategory },
+                    success: function (response) {
+                         let indexX = 0;
+                         let xValues = [];
+                         let yValues = [];
+                         let indexobj = 0;
+                         let obj = [];
+                         console.log(response);
+                         for (var key in response) {
+                              obj[indexobj] = response[key];
+                              indexobj++;
+                         }
+                         for (var index in obj) {
+                              xValues[indexX] = obj[index]['name'];
+                              yValues[indexX] = obj[index]['total_money'];
+                              totalSum =totalSum+ Number(yValues[indexX]);
+                              indexX++;
+                         }
+                         $('#totalSum').val(totalSum);
+                         new Chart("myChart", {
+                              type: "bar",
+                              data: {
+                                   labels: xValues,
+                                   datasets: [{
+                                        backgroundColor: "rgba(0,0,255,1.0)",
+                                        borderColor: "rgba(0,0,255,0.1)",
+                                        data: yValues
+                                   }]
+                              },
+                              options: {
+                                   legend: { display: false },
+                                   title: {
+                                        display: true,
+                                        text: "Thống kê theo danh mục sản phẩm"
+                                   },
+                              }
+                         });
+                    }
+               });
+               $('#listProSold').html(``);
+               listProSoldCate(start_day, end_day, selectCategory);
+          }
      });
-
 });

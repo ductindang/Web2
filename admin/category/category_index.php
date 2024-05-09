@@ -1,118 +1,120 @@
+<?php
+    $title = 'Quản Lý Danh Mục';
+    $baseUrl = '../';
+    require_once('../layouts/header.php');
+    require_once($baseUrl.'../utils/utility.php');
+    require_once($baseUrl.'../database/dbhelper.php');
 
-  <?php
 
-      $title = 'Quản lý danh mục sản phẩm';
-      $baseUrl=  '../';
-      require_once('../layouts/header.php');
+   
+
+    $search_keyword = isset($_GET['search_keyword']) ? $_GET['search_keyword'] : '';
+
+    // Truy vấn lấy dữ liệu từ bảng 'category' với điều kiện tìm kiếm
+    $sql = "SELECT * FROM category WHERE deleted = 0";
     
-      
+    if ($search_keyword !== '') {
+        $sql .= " AND name LIKE '%$search_keyword%'";
+    }
+
+    $data = executeResult($sql);
+
+?>
+
+<div class="row" style="margin-top: 20px;">
+    <div class="col-md-12 table-responsive">
+        <h1 class="badge-pill badge-primary" style="display:flex;justify-content: center;padding: 10px;">Quản Lý Danh Mục</h1>
+    </div>
     
-      require_once('../category/form_save.php');  
-      require_once('../category/form_api.php');  
-      
-      $id=$name='';
-      if (isset($_GET['id'])) {
-          $id = getGET('id');
-          $sql = "SELECT * FROM category WHERE id = $id";
-          $data = executeResult($sql, true);
-          if (!empty($data)) {
-              $name = $data[0]['name']; // Access the first row
-          }
-      }
-  
 
-      $sql ="select * from category    WHERE category.deleted = 0";
-      $data= executeResult($sql);
-      ?>   <div class ="row" style="margin-top:20px;">
-        <div class="col-md-12 ">
-        <h3>Quản lý danh mục sản phẩm</h3>
-        </div>
-        <div class="col-md-6 " style="margin-top:20px">
-        <form method="post" action="category_index.php" onsubmit="return validateForm();">
-            <div class="form-group">
-            <label for="usr" style="font-weight:bold;">Tên danh mục:</label>
-            <input required="true" type="text" class="form-control" id="name" name="name" value="<?=$name?>">
-          <input type="text" name ="id" value="<?=$id?>" hidden="true">
-          <?php if (checkPrivilege('category_add.php')) { ?> 
-           <button class="btn btn-success">Thêm</button>
-	
-          <?php } ?>	
-          <?php if (checkPrivilege('category_edit.php')) { ?> 
-            <button class="btn btn-success">Sửa</button>
-	
-          <?php } ?>	
-                  </div>
-              
-              </form>  
-              </div>
+    <?php if (checkPrivilege('category_add.php')) { ?>
+        <div class="">    <a href="editor.php"><button class="btn btn-success ml-7 ">Thêm Danh Mục</button></a></div>
 
-        <div class="col-md-12 table-responsive">
-      
+    <?php } ?>
 
-    
-          <table class="table table-bordered table-hover  ">
-          <thread>
+    <div class="form-group">
+    <input type="text" id="search_keyword" class="form-control mt-5" placeholder="Nhập từ khóa tìm kiếm...">
+    <button onclick="searchCategory()" class="btn btn-primary m-1">Tìm kiếm</button>
+    </div>
+    <table class="table table-bordered table-hover table-striped" style="margin-top: 20px;">
+        <thead class="thead-light">
             <tr>
-            <th>STT</th>
-              <th>Tên danh mục</th>
-              
-              <th style="width: 50px"></th>
-              <th style="width: 50px"></th>
+                <th style="padding: 5px 5px;">
+                    <div style="display: flex; align-items: center;">
+                        <span style="margin-right: auto;">STT</span>
+                    </div>
+                </th>
+                <th style="padding: 5px 5px;">
+                    <div style="display: flex; align-items: center;">
+                        <span style="margin-right: auto;">Tên Danh Mục</span>
+                    </div>
+                </th>
+                <th style="width: 50px;"></th>
+                <th style="width: 50px;"></th>
             </tr>
+        </thead>
+        <tbody>
+            <?php
+                $index = 0;
+                foreach($data as $item) {
+                    echo '<tr>
+                            <th>'.(++$index).'</th>
+                            <td>'.$item['name'].'</td>
+                            <td style="width: 50px">';
+                    
+                    // Kiểm tra quyền truy cập và hiển thị nút "Sửa"
+                    if (checkPrivilege('category_edit.php')) {
+                    echo '<a href="editor.php?id='.$item['id'].'"><button class="btn btn-warning">Sửa</button></a>';
+                    }
+                    echo '</td>
+                            <td style="width: 50px">';
+                            if (checkPrivilege('category_delete.php')) {
+                    // Hiển thị nút "Xoá" và kích hoạt hộp thoại xác nhận
+                    echo '<button onclick="deleteCategory('.$item['id'].')" class="btn btn-danger">Xoá</button>';
+                }
+                    echo '</td>
+                        </tr>';
+                }
+            ?>
+        </tbody>
+    </table>
+</div>
 
-          </thread>
-      <?php
-      $index=0;
-      foreach ($data as $item) {
-         echo '<tr>
-            <td>' . (++$index) . '</td>
-            <td>' . $item['name'] . '</td>
-            <td style="width: 50px">';
-    
-    // Kiểm tra quyền truy cập
-    if (checkPrivilege('category_edit.php')) {
-        echo '<a href="?id=' . $item['id'] . '"><button class="btn btn-warning">Sửa</button></a>';
-    }
-    echo '</td>
-    <td style="width: 50px">';
-        // Kiểm tra quyền truy cập
-        if (checkPrivilege('category_delete.php')) {
-            echo '<a href="#" onclick="deleteCategory(' . $item['id'] . '); return false;">
-                      <button class="btn btn-danger">Xóa</button>
-                  </a>
-                  <form id="deleteForm' . $item['id'] . '" action="form_api.php" method="post" style="display: none;">
-                      <input type="hidden" name="id" value="' . $item['id'] . '">
-                      <input type="hidden" name="action" value="delete">
-                  </form>';
-        }
-    
-        echo '</td>
-              </tr>';
-    }
-
-  ?>
-
-          </table>
-      </div>
-  </div>
-  
- <script>
+<script type="text/javascript">
     function deleteCategory(id) {
-        option = confirm('Bạn có chắc chắn muốn xóa danh mục này không?');
-        if (!option) return;
-
-        // Gửi yêu cầu xóa danh mục
-        $.post('form_api.php', {
-            'id': id,
-            'action': 'delete'
-        }, function(data) {
-            // Sau khi xóa thành công, chuyển hướng người dùng trở lại trang quản lý danh mục
-            window.location.href = 'category_index.php';
+        Swal.fire({
+            title: 'Bạn chắc chắn muốn xoá danh mục này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Xoá',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Nếu người dùng nhấn vào nút Xoá, thực hiện xoá danh mục
+                $.post('form_api.php', {
+                    'id': id,
+                    'action': 'delete'
+                }, function(data) {
+                    location.reload();
+                });
+            }
         });
     }
+    function searchCategory() {
+    var searchKeyword = document.getElementById('search_keyword').value.trim();
+
+    // Tạo URL mới với tham số search_keyword
+    var url = window.location.pathname + '?';
+    if (searchKeyword !== '') {
+        url += 'search_keyword=' + encodeURIComponent(searchKeyword);
+    }
+    // Chuyển hướng đến URL mới
+    window.location.href = url;
+}
 </script>
 
-  <?php
-  require_once('../layouts/footer.php');
-  ?>
-
+<?php
+    require_once('../layouts/footer.php');
+?>

@@ -16,17 +16,18 @@ class RegisterController {
         // }
         
         $customerRepository = new CustomerRepository();
+        $currentDateTime = date("Y-m-d H:i:s");
         $data = [
+            "role_id" => 4,
             "name" => $_POST["fullname"],
-            "password" => $_POST["password"],   
             "mobile" => $_POST["mobile"],
             "email" => $_POST["email"],
-            "login_by" => "form",
+            "password" => $_POST["password"],
+            "updated_at" => $currentDateTime,
+            "created_at" => $currentDateTime,
             "is_active" => 1,
-            "shipping_name" => "",
-            "shipping_mobile" => "",
+            "address" => "",
             "ward_id" => null,
-            "housenumber_street" => "",
         ];
         if ($customerRepository->save($data)) {
             $_SESSION["success"] = "Đã tạo tài khoản thành công";
@@ -51,6 +52,10 @@ class RegisterController {
         // else {
         //     $_SESSION["error"] = $customerRepository->getError();
         }
+        // else{
+        //     $_SESSION["success"] = "Lỗi không vào database";
+        //     $_SESSION["success"] = $data["role_id"] . $data["name"] . $data["mobile"] . $data["email"] . $data["password"] . $data["updated_at"] . $data["created_at"] . $data["is_active"] . $data["address"] . $data["ward_id"];
+        // }
         header("location:index.php");
     }
 
